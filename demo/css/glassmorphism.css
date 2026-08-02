@@ -1,0 +1,805 @@
+/* ==========================================================================
+   Glassmorphism skin — visual overlay only.
+   Loaded after all theme/Elementor CSS. Same markup, same layout, same
+   content — this file only restyles existing elements: light color scheme
+   (no dark sections) + a single consistent glass-card treatment.
+
+   Glass recipe (from https://css.glass, as supplied):
+   background: rgba(255,255,255,.35); border-radius:16px;
+   box-shadow: 0 4px 30px rgba(0,0,0,.1); backdrop-filter: blur(8.6px);
+   border: 1px solid rgba(255,255,255,.51);
+   ========================================================================== */
+
+:root {
+  --glass-bg: rgba(255, 255, 255, 0.35);
+  --glass-bg-strong: rgba(255, 255, 255, 0.55);
+  --glass-border: rgba(255, 255, 255, 0.51);
+  --glass-radius: 16px;
+  --glass-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  --glass-blur: blur(8.6px);
+
+  --ink: #0b1a3a;      /* dark text (was --assimox-black, reused for consistency) */
+  --ink-soft: #4a5568; /* softer body text on light bg */
+  --panel-tint-blue: #f5f5f4;  /* neutral gray-tinted section tint (was cool blue-tint) */
+  --panel-tint-warm: #fdf3e9;  /* warm orange-tinted section tint (was cream/yellow-tint) */
+
+  /* Brand palette — sampled directly from images/logo.png */
+  --assimox-primary: #ff9d1e;
+  --assimox-primary-rgb: 255, 157, 30;
+  --assimox-base: #e8850a;
+  --assimox-base-rgb: 232, 133, 10;
+  --brand-gray: #959493;
+}
+
+/* ==========================================================================
+   Logo / wordmark
+   ========================================================================== */
+
+.site-logo-img {
+  object-fit: contain;
+}
+
+.site-wordmark {
+  font-family: var(--assimox-font-two, 'Roboto', sans-serif);
+  font-weight: 700;
+  font-size: 22px;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+  line-height: 1;
+}
+
+.main-menu-two__logo a,
+.footer-widget__logo a,
+.logo-box a,
+.sidebar-info-contents .logo a {
+  display: flex !important;
+  align-items: center;
+  gap: 10px;
+}
+
+.site-wordmark--light {
+  color: #fff;
+}
+
+.glass-surface {
+  background: var(--glass-bg) !important;
+  border-radius: var(--glass-radius) !important;
+  box-shadow: var(--glass-shadow);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border) !important;
+}
+
+/* ==========================================================================
+   Header
+   ========================================================================== */
+
+.main-header-two__top {
+  background: rgba(255, 255, 255, 0.55) !important;
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border-bottom: 1px solid var(--glass-border);
+}
+.main-header-two__top-number a,
+.main-header-two__top-text-box p,
+.main-header-two__social a {
+  color: var(--ink) !important;
+}
+
+/* Per request: wrapper collapses to zero height (the visible glass card is
+   carried entirely by .main-menu-two__wrapper-inner below it). */
+.main-menu-two__wrapper {
+  height: 0px;
+}
+
+.main-menu-two__wrapper-inner {
+  background: var(--glass-bg-strong) !important;
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--glass-radius) !important;
+  box-shadow: var(--glass-shadow);
+}
+
+/* Theme's decorative dark band behind the floating nav card — switched to a
+   soft light tint so nothing dark shows behind the glass. */
+.main-menu-two:before {
+  background-color: var(--panel-tint-blue) !important;
+}
+
+.main-menu__list .sub-menu,
+.main-menu-two__list .sub-menu {
+  background: var(--glass-bg-strong) !important;
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--glass-radius) !important;
+  overflow: hidden;
+  box-shadow: var(--glass-shadow);
+}
+.main-menu__list .sub-menu li a {
+  color: var(--ink) !important;
+}
+
+.main-menu-two__search-nav-sidebar a,
+.mobile-nav__toggler,
+.search-toggler {
+  border-radius: 999px !important;
+}
+
+.main-menu-two__side-content-icon a {
+  background: var(--glass-bg-strong) !important;
+  backdrop-filter: var(--glass-blur);
+  border-radius: 999px !important;
+  color: var(--ink) !important;
+}
+
+.stricky-header.stricked-menu.main-menu.main-menu-two.stricky-fixed {
+  background: var(--glass-bg-strong) !important;
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  box-shadow: var(--glass-shadow);
+}
+.stricky-header.stricked-menu.main-menu.main-menu-two.stricky-fixed:before {
+  background-color: transparent !important;
+}
+
+.sticky-header__content {
+  background: var(--glass-bg-strong) !important;
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border-radius: var(--glass-radius) !important;
+}
+
+.mobile-nav__content {
+  background: rgba(255, 255, 255, 0.97) !important;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top-left-radius: var(--glass-radius);
+  border-bottom-left-radius: var(--glass-radius);
+}
+.mobile-nav__close,
+.mobile-nav__contact li a,
+.mobile-nav__contact li i {
+  color: var(--ink) !important;
+}
+.mobile-nav__social a {
+  color: var(--ink) !important;
+}
+.mobile-nav__container .main-menu__list > li > a,
+.mobile-nav__container .main-menu__list > li > ul > li > a,
+.mobile-nav__container .main-menu__list > li > ul > li > ul > li > a {
+  color: var(--ink) !important;
+}
+.mobile-nav__container .main-menu__list > li {
+  border-bottom: 1px solid rgba(11, 26, 58, 0.1);
+}
+
+.search-popup__content {
+  border-radius: var(--glass-radius) !important;
+  overflow: hidden;
+}
+
+/* ==========================================================================
+   Buttons
+   ========================================================================== */
+
+.thm-btn {
+  background: var(--assimox-primary) !important;
+  color: #fff !important;
+  border-radius: 999px !important;
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border) !important;
+  box-shadow: var(--glass-shadow);
+  overflow: hidden;
+}
+.thm-btn:hover {
+  background: var(--assimox-base) !important;
+  color: #fff !important;
+}
+
+/* ==========================================================================
+   Hero / main slider
+   ========================================================================== */
+
+.main-slider__content {
+  background: var(--glass-bg) !important;
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--glass-radius) !important;
+  padding: 44px 46px !important;
+  box-shadow: var(--glass-shadow);
+}
+
+.main-slider__image img {
+  border-radius: var(--glass-radius) !important;
+}
+
+.main-slider__badge {
+  border-radius: 999px !important;
+  background: var(--glass-bg-strong) !important;
+  backdrop-filter: var(--glass-blur);
+  padding: 8px;
+  box-shadow: var(--glass-shadow);
+}
+.main-slider__badge img {
+  border-radius: 999px !important;
+}
+
+.main-slider__nav .owl-prev,
+.main-slider__nav .owl-next,
+.main-slider__nav button {
+  background: var(--glass-bg-strong) !important;
+  backdrop-filter: var(--glass-blur);
+  border-radius: 999px !important;
+  border: 1px solid var(--glass-border) !important;
+}
+
+/* ==========================================================================
+   Experience & rating bar
+   ========================================================================== */
+
+.experience-and-rating__right:before {
+  background-color: var(--panel-tint-blue) !important;
+}
+
+.experience-and-rating__experience {
+  background: var(--panel-tint-warm) !important;
+}
+
+.experience-and-rating__experience-year h2,
+.experience-and-rating__experience-year h5,
+.experience-and-rating__experience-text-box p,
+.experience-and-rating__rating-text {
+  color: var(--ink) !important;
+}
+
+.experience-and-rating__experience-text-box p {
+  padding: 4px 10px;
+}
+
+.experience-and-rating__video-link,
+.experience-and-rating__video-icon {
+  border-radius: 999px !important;
+  backdrop-filter: var(--glass-blur);
+}
+
+.experience-and-rating__right-content {
+  border-radius: var(--glass-radius) !important;
+  overflow: hidden;
+}
+
+.experience-and-rating__rating-box {
+  background: var(--glass-bg-strong) !important;
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--glass-radius) !important;
+  box-shadow: var(--glass-shadow);
+}
+
+/* ==========================================================================
+   Services
+   ========================================================================== */
+
+.services-one {
+  background-color: var(--panel-tint-blue) !important;
+}
+.services-one__title a,
+.services-one__top-left .section-title__title,
+.services-one__all-services-inner p {
+  color: var(--ink) !important;
+}
+.services-one__all-services-inner a {
+  color: var(--ink) !important;
+  text-decoration: underline;
+}
+
+.services-one__single {
+  background: var(--glass-bg) !important;
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--glass-radius) !important;
+  box-shadow: var(--glass-shadow);
+  transition: transform 0.4s ease, background 0.4s ease;
+}
+.services-one__single:hover {
+  background: var(--glass-bg-strong) !important;
+  transform: translateY(-6px);
+}
+
+.services-one__icon {
+  border-radius: var(--glass-radius) !important;
+  background: var(--glass-bg-strong) !important;
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+}
+
+.services-one__img img,
+.services-one__img {
+  border-radius: var(--glass-radius) !important;
+}
+
+.services-one__list {
+  flex: 0 0 24%;
+}
+
+.services-one__list-box.list-unstyled {
+  gap: 10px;
+}
+
+/* .services-one__all-services-inner intentionally left un-glassed. */
+
+.services-one__top-icon {
+  border-radius: 999px !important;
+  background: var(--glass-bg-strong) !important;
+  backdrop-filter: var(--glass-blur);
+}
+
+/* Theme hardcodes #11aded (old blue) in several spots instead of using the
+   CSS variables — override those directly to match the new orange brand. */
+.services-one__read-more a,
+.services-one__all-services-inner p a,
+.services-one__top-icon span,
+.services-one__top-left .section-title__tagline,
+.services-one__top-text,
+.why-choose-one__content .section-title__tagline {
+  color: var(--assimox-primary) !important;
+}
+.services-one__all-services-inner p a:before,
+.services-one__top-left .section-title__tagline:before,
+.why-choose-one__content .section-title__tagline:before {
+  background-color: var(--assimox-primary) !important;
+}
+
+/* ==========================================================================
+   About
+   ========================================================================== */
+
+.about-one__img-box {
+  border-radius: var(--glass-radius) !important;
+  overflow: hidden;
+}
+.about-one__img-box img {
+  border-radius: var(--glass-radius) !important;
+}
+
+.about-one__satisfaction-count-box,
+.about-one__satisfaction {
+  background: var(--glass-bg-strong) !important;
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--glass-radius) !important;
+  box-shadow: var(--glass-shadow);
+}
+.about-one__satisfaction-count-box h3,
+.about-one__satisfaction-text {
+  color: var(--ink) !important;
+}
+
+.about-one__points-box {
+  background: var(--glass-bg) !important;
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--glass-radius) !important;
+  padding: 20px;
+  transition: background 0.35s ease, transform 0.35s ease;
+}
+.about-one__points-box:hover {
+  background: var(--glass-bg-strong) !important;
+  transform: translateY(-3px);
+}
+
+.about-one__points-icon {
+  border-radius: 999px !important;
+}
+
+/* ==========================================================================
+   Why choose us
+   ========================================================================== */
+
+.why-choose-one {
+  background-color: var(--panel-tint-warm) !important;
+}
+.why-choose-one__content .section-title__title,
+.why-choose-one__text,
+.why-choose-one__points li .text p {
+  color: var(--ink) !important;
+}
+
+.why-choose-one__points-box {
+  background: var(--glass-bg) !important;
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--glass-radius) !important;
+  box-shadow: var(--glass-shadow);
+  padding: 14px;
+  transition: transform 0.35s ease, background 0.35s ease;
+}
+.why-choose-one__points-box:hover {
+  background: var(--glass-bg-strong) !important;
+  transform: translateY(-4px);
+}
+
+.why-choose-one__img-1 img,
+.why-choose-one__img-1 {
+  border-radius: var(--glass-radius) !important;
+}
+
+/* ==========================================================================
+   Process
+   ========================================================================== */
+
+.process__single {
+  background: var(--glass-bg) !important;
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--glass-radius) !important;
+  box-shadow: var(--glass-shadow);
+  transition: transform 0.35s ease;
+}
+.process__single:hover { transform: translateY(-6px); }
+
+/* .process__icon intentionally left un-glassed. */
+
+.process__count {
+  border-radius: 999px !important;
+}
+
+/* ==========================================================================
+   Contact bar (free diagnostics)
+   ========================================================================== */
+
+.contact-bar__inne,
+.contact-bar__inner {
+  background: var(--glass-bg-strong) !important;
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--glass-radius) !important;
+  box-shadow: var(--glass-shadow);
+}
+.contact-bar__inne:before {
+  background-color: var(--panel-tint-warm) !important;
+}
+.contact-bar__title,
+.contact-bar__text,
+.contact-bar__call-number a,
+.contact-bar__call-time {
+  color: var(--ink) !important;
+}
+
+.contact-bar__call-icon,
+.contact-bar__left-icon {
+  border-radius: 999px !important;
+  background: var(--glass-bg) !important;
+  backdrop-filter: var(--glass-blur);
+}
+
+/* ==========================================================================
+   Team
+   ========================================================================== */
+
+.team-one__single {
+  background: var(--glass-bg) !important;
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--glass-radius) !important;
+  box-shadow: var(--glass-shadow);
+  overflow: hidden;
+  transition: transform 0.35s ease;
+}
+.team-one__single:hover { transform: translateY(-6px); }
+
+.team-one__img-box,
+.team-one__img,
+.team-one__img img {
+  border-radius: var(--glass-radius) var(--glass-radius) 0 0 !important;
+}
+
+.team-one__social-box a,
+.team-one__social a {
+  background: var(--glass-bg-strong) !important;
+  backdrop-filter: var(--glass-blur);
+  border-radius: 999px !important;
+  border: 1px solid var(--glass-border);
+}
+
+/* ==========================================================================
+   Testimonials
+   ========================================================================== */
+
+.testimonial-one__content {
+  background: var(--glass-bg-strong) !important;
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--glass-radius) !important;
+  box-shadow: var(--glass-shadow);
+}
+
+.testimonial-one__client-img,
+.testimonial-one__client-img img {
+  border-radius: 999px !important;
+  border: 2px solid rgba(255, 255, 255, 0.7);
+}
+
+/* ==========================================================================
+   FAQ + contact form
+   ========================================================================== */
+
+.faq-one {
+  background-color: var(--panel-tint-blue) !important;
+}
+.faq-one__left .section-title__title {
+  color: var(--ink) !important;
+}
+
+.faq-one__faq-box {
+  background: var(--glass-bg) !important;
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--glass-radius) !important;
+  box-shadow: var(--glass-shadow);
+  overflow: hidden;
+}
+
+.accrodion {
+  background: transparent !important;
+  border-bottom: 1px solid var(--glass-border) !important;
+  border-radius: 0 !important;
+}
+.accrodion:last-child { border-bottom: none !important; }
+.accrodion.active {
+  background: var(--glass-bg-strong) !important;
+  border-radius: var(--glass-radius) !important;
+}
+
+.faq-one__form-box {
+  background: var(--glass-bg-strong) !important;
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--glass-radius) !important;
+  box-shadow: var(--glass-shadow);
+}
+
+.faq-one__form-input-box input,
+.faq-one__form-input-box textarea,
+.wpcf7-form-control {
+  background: rgba(255, 255, 255, 0.6) !important;
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border) !important;
+  border-radius: var(--glass-radius) !important;
+  color: var(--ink) !important;
+}
+
+.faq-one__form-btn {
+  border-radius: 999px !important;
+}
+
+/* ==========================================================================
+   Blog
+   ========================================================================== */
+
+.blog-one__single {
+  background: var(--glass-bg) !important;
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--glass-radius) !important;
+  box-shadow: var(--glass-shadow);
+  overflow: hidden;
+  transition: transform 0.35s ease;
+}
+.blog-one__single:hover { transform: translateY(-6px); }
+
+.blog-one__img-box,
+.blog-one__img img {
+  border-radius: var(--glass-radius) var(--glass-radius) 0 0 !important;
+}
+
+.blog-one__content-box {
+  padding: 16px;
+}
+
+.blog-one__date {
+  background: var(--glass-bg-strong) !important;
+  backdrop-filter: var(--glass-blur);
+  border-radius: 999px !important;
+  border: 1px solid var(--glass-border);
+}
+
+/* ==========================================================================
+   Footer
+   ========================================================================== */
+
+.site-footer,
+.elementor-element-a07c1b9 {
+  background-color: var(--panel-tint-blue) !important;
+}
+.site-footer__top {
+  background-color: var(--glass-bg-strong) !important;
+  backdrop-filter: var(--glass-blur);
+  border-color: var(--glass-border) !important;
+}
+.site-footer__contact-points li .content a,
+.site-footer__contact-points li .content h4,
+.site-footer__contact-points li .content p,
+.footer-widget__title,
+.footer-widget__about p,
+.footer-widget__useful-links-list li a {
+  color: var(--ink) !important;
+}
+.footer-widget__useful-links-list li a {
+  opacity: 0.75;
+}
+
+.footer-widget__subscribe-box {
+  background: var(--glass-bg) !important;
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: 999px !important;
+  overflow: hidden;
+}
+
+.footer-widget__subscribe-input-box input {
+  background: transparent !important;
+  border: none !important;
+  color: var(--ink) !important;
+}
+
+.footer-widget__subscribe-btn {
+  border-radius: 999px !important;
+}
+
+.site-footer__social a {
+  background: var(--glass-bg-strong) !important;
+  backdrop-filter: var(--glass-blur);
+  border-radius: 999px !important;
+  border: 1px solid var(--glass-border);
+  color: var(--ink) !important;
+}
+
+
+.site-footer__bottom-text,
+.site-footer__bottom-text-two,
+.site-footer__bottom-text a {
+  color: var(--ink) !important;
+  opacity: 0.75;
+}
+
+/* ==========================================================================
+   Scroll-reveal animations
+   The theme ships WOW.js + animate.css, but WOW's init is wired through an
+   Elementor "frontend/element_ready" hook that never fires outside a live
+   Elementor/WP render — confirmed by testing (jQuery/WOW/elementorFrontend
+   all load fine, but zero elements ever get WOW's `.animated` class, and a
+   few end up permanently invisible because WOW still hides them on
+   registration). This block replaces that mechanism with a small
+   dependency-free IntersectionObserver script (js/scroll-reveal.js) driving
+   the same `.wow <animation-name>` classes already on the markup.
+   ========================================================================== */
+
+.wow {
+  visibility: visible !important; /* neutralize WOW.js's inline hide */
+}
+
+.wow.fadeInLeft,
+.wow.fadeInRight,
+.wow.fadeInUp,
+.wow.fadeIn,
+.wow.zoomIn,
+.wow.flipInX {
+  opacity: 0;
+  transition-property: opacity, transform;
+  transition-duration: 900ms;
+  transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.wow.fadeInLeft { transform: translateX(-58px); }
+.wow.fadeInRight { transform: translateX(58px); }
+.wow.fadeInUp { transform: translateY(46px); }
+.wow.zoomIn { transform: scale(0.82); }
+.wow.flipInX { transform: perspective(900px) rotateX(35deg); }
+.wow.fadeIn { transform: none; }
+
+.wow.reveal-in {
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wow.fadeInLeft,
+  .wow.fadeInRight,
+  .wow.fadeInUp,
+  .wow.fadeIn,
+  .wow.zoomIn,
+  .wow.flipInX {
+    transition-duration: 1ms;
+    transform: none;
+    opacity: 1;
+  }
+}
+
+/* ==========================================================================
+   Mobile fixes
+   Confirmed via real device-emulated scrolling (not Playwright's fullPage
+   screenshot, which doesn't reliably trigger the scroll-reveal observer and
+   gives false "blank" readings) on 412x915 (Pixel-class) and 430x932
+   (iPhone 15 Plus) viewports.
+   ========================================================================== */
+
+@media (max-width: 767px) {
+  /* BUG: .services-one__list was hard-set to flex: 0 0 24% (desktop 4-up
+     grid) with no responsive override, so on mobile the cards wedged onto
+     rows at odd widths, wrapping their heading/"Read More" text and
+     colliding with the back-to-top button. Requested layout: 2 per row on
+     mobile, sized around the 10px gap set on .services-one__list-box. */
+  .services-one__list {
+    flex: 0 0 calc(50% - 5px);
+  }
+  .services-one__single {
+    padding: 28px 20px 24px;
+  }
+  .services-one__icon span {
+    font-size: 44px !important;
+  }
+
+  /* BUG: testimonial owl-carousel's dot pagination is absolutely positioned
+     bottom-right over the card; on narrow widths the reviewer's
+     name/location line runs directly into it. Drop it back into normal
+     flow, centered below the card, instead of overlapping. */
+  .testimonial-one__carousel .owl-dots {
+    position: static !important;
+    bottom: auto;
+    right: auto;
+    margin: 20px 0 0 !important;
+  }
+  .testimonial-one__client-info {
+    flex-wrap: wrap;
+  }
+
+  /* BUG: .scroll-to-top is fixed at bottom:40px/right:40px with no mobile
+     override; once a visitor scrolls to the true bottom of the page it
+     sits on top of the centered copyright line. Give the footer enough
+     bottom clearance that the button floats over empty space instead. */
+  .site-footer__bottom {
+    padding-bottom: 90px;
+  }
+
+  /* Desktop-scaled vertical section padding (up to 215px top on team-one)
+     reads as dead space on a narrow screen. Tighten it for a denser,
+     more premium mobile rhythm closer to the reference site. */
+  .services-one,
+  .why-choose-one,
+  .faq-one {
+    padding-top: 64px;
+    padding-bottom: 64px;
+  }
+  .process {
+    padding-top: 64px;
+    padding-bottom: 64px;
+  }
+  .team-one {
+    padding-top: 64px;
+    padding-bottom: 64px;
+  }
+  .testimonial-one {
+    padding-top: 56px;
+    padding-bottom: 56px;
+  }
+
+  .main-slider__content {
+    padding: 30px 26px !important;
+  }
+}
