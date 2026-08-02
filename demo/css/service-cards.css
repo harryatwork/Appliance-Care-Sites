@@ -1,0 +1,277 @@
+/* ==========================================================================
+   Service Cards — premium redesign
+   Scope: ONLY .services-one__list / .services-one__single (the 7 repeating
+   service cards + their icon, title, subtitle and CTA). Everything else on
+   the site — including the section header and the "view all services" card
+   — is untouched. Loaded after glassmorphism.css, which has had its old
+   card rules removed in favor of this file.
+
+   Desktop keeps the existing 4-per-row grid; only the mobile breakpoints
+   below change the column count (2-up, then 1-up under 380px).
+   ========================================================================== */
+
+:root {
+  --sc-primary: #0b1b45;
+  --sc-accent: #ff9800;
+  --sc-accent-tint: rgba(255, 152, 0, 0.1);
+  --sc-card: #ffffff;
+  --sc-subtitle: #8a94a6;
+  --sc-border: #ececec;
+  --sc-shadow-rest: 0 4px 20px rgba(11, 27, 69, 0.06);
+  --sc-shadow-hover: 0 16px 32px rgba(11, 27, 69, 0.12);
+  --sc-ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ==========================================================================
+   Grid
+   ========================================================================== */
+
+.services-one__list-box.list-unstyled {
+  gap: 16px;
+}
+
+.services-one__list {
+  /* 4 per row, matched to the 16px gap above (100% - 3*16px) / 4 */
+  flex: 0 0 calc(25% - 12px);
+  min-width: 0; /* let the flex-basis win over the CTA's nowrap min-content width */
+  display: flex; /* stretches .services-one__single to equal row height */
+}
+
+/* ==========================================================================
+   Card shell
+   ========================================================================== */
+
+.services-one__single {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  background: var(--sc-card) !important;
+  border: 1px solid var(--sc-border) !important;
+  border-radius: 20px !important;
+  padding: 28px 24px !important;
+  box-shadow: var(--sc-shadow-rest) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  transition: transform 0.25s var(--sc-ease), box-shadow 0.25s var(--sc-ease);
+}
+
+.services-one__single:active {
+  transform: scale(0.98);
+  transition-duration: 0.15s;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .services-one__single:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--sc-shadow-hover) !important;
+  }
+  .services-one__single:hover:active {
+    transform: translateY(-8px) scale(0.98);
+  }
+  .services-one__single:hover .services-one__icon span {
+    transform: rotate(8deg);
+  }
+  .services-one__single:hover .services-one__cta-arrow {
+    animation: none;
+    transform: translateX(4px);
+  }
+}
+
+/* ==========================================================================
+   Icon
+   ========================================================================== */
+
+.services-one__icon {
+  width: 54px;
+  height: 54px;
+  flex: 0 0 54px;
+  border-radius: 50%;
+  background: var(--sc-accent-tint) !important;
+  border: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+  animation: sc-float 3s ease-in-out infinite;
+}
+
+.services-one__icon span {
+  font-size: 30px !important;
+  color: var(--sc-accent) !important;
+  display: block;
+  transition: transform 0.25s var(--sc-ease);
+}
+
+@keyframes sc-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+/* ==========================================================================
+   Typography
+   ========================================================================== */
+
+.services-one__title-box {
+  margin-top: 0;
+  margin-bottom: 20px;
+}
+
+.services-one__title {
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.25;
+  margin-bottom: 4px;
+}
+
+.services-one__title a {
+  color: var(--sc-primary) !important;
+}
+
+.services-one__sub-title {
+  font-size: 14px !important;
+  color: var(--sc-subtitle) !important;
+  line-height: 1.5 !important;
+}
+
+/* ==========================================================================
+   CTA
+   ========================================================================== */
+
+.services-one__read-more {
+  margin-top: auto; /* pins the CTA to the bottom regardless of text length */
+  padding-top: 16px;
+}
+
+.services-one__cta {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px; /* accessible touch target; visually reads as ~38-40px via padding */
+  padding: 10px 20px;
+  background: var(--sc-accent) !important;
+  color: #fff !important;
+  border-radius: 999px !important;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: var(--assimox-font-two, inherit);
+  letter-spacing: 0.02em;
+  text-transform: none !important;
+  white-space: nowrap;
+  box-shadow: 0 4px 10px rgba(255, 152, 0, 0.32);
+  transition: transform 0.25s var(--sc-ease), box-shadow 0.25s var(--sc-ease), background 0.25s var(--sc-ease);
+}
+
+.services-one__cta:hover {
+  background: #f08a00 !important;
+  color: #fff !important;
+  box-shadow: 0 6px 16px rgba(255, 152, 0, 0.4);
+}
+
+.services-one__cta:focus-visible {
+  outline: 2px solid var(--sc-primary);
+  outline-offset: 3px;
+}
+
+.services-one__cta-arrow {
+  font-size: 12px;
+  animation: sc-arrow-nudge 2s ease-in-out infinite;
+}
+
+@keyframes sc-arrow-nudge {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(2px);
+  }
+}
+
+/* ==========================================================================
+   Entrance animation (scroll reveal)
+   Driven by js/service-cards.js, which toggles .is-visible via
+   IntersectionObserver and sets an 80ms-per-card stagger delay.
+   ========================================================================== */
+
+.services-one__list {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.services-one__list.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ==========================================================================
+   Accessibility
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .services-one__list {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .services-one__icon {
+    animation: none;
+  }
+  .services-one__cta-arrow {
+    animation: none;
+  }
+  .services-one__single,
+  .services-one__single:active,
+  .services-one__icon span,
+  .services-one__cta {
+    transition: none;
+  }
+  .services-one__single:hover {
+    transform: none;
+  }
+}
+
+/* ==========================================================================
+   Mobile layout
+   ========================================================================== */
+
+@media (max-width: 767px) {
+  .services-one__list {
+    flex: 0 0 calc(50% - 8px);
+  }
+  .services-one__single {
+    padding: 22px 18px;
+  }
+  .services-one__icon {
+    width: 48px;
+    height: 48px;
+    flex-basis: 48px;
+    margin-bottom: 14px;
+  }
+  .services-one__icon span {
+    font-size: 26px !important;
+  }
+  .services-one__title {
+    font-size: 18px;
+  }
+  .services-one__title-box {
+    margin-bottom: 14px;
+  }
+  .services-one__cta {
+    padding: 9px 16px;
+    font-size: 12.5px;
+  }
+}
+
+@media (max-width: 379px) {
+  .services-one__list {
+    flex: 0 0 100%;
+  }
+}

@@ -296,38 +296,15 @@
   text-decoration: underline;
 }
 
-.services-one__single {
-  background: var(--glass-bg) !important;
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--glass-radius) !important;
-  box-shadow: var(--glass-shadow);
-  transition: transform 0.4s ease, background 0.4s ease;
-}
-.services-one__single:hover {
-  background: var(--glass-bg-strong) !important;
-  transform: translateY(-6px);
-}
-
-.services-one__icon {
-  border-radius: var(--glass-radius) !important;
-  background: var(--glass-bg-strong) !important;
-  backdrop-filter: var(--glass-blur);
-  border: 1px solid var(--glass-border);
-}
+/* .services-one__single, .services-one__icon, .services-one__list and
+   .services-one__read-more are fully redesigned in css/service-cards.css —
+   see that file for the per-card component. This file keeps only the
+   section-level chrome (background, heading colors, the decorative side
+   image, and the "view all" card). */
 
 .services-one__img img,
 .services-one__img {
   border-radius: var(--glass-radius) !important;
-}
-
-.services-one__list {
-  flex: 0 0 24%;
-}
-
-.services-one__list-box.list-unstyled {
-  gap: 10px;
 }
 
 /* .services-one__all-services-inner intentionally left un-glassed. */
@@ -339,8 +316,9 @@
 }
 
 /* Theme hardcodes #11aded (old blue) in several spots instead of using the
-   CSS variables — override those directly to match the new orange brand. */
-.services-one__read-more a,
+   CSS variables — override those directly to match the new orange brand.
+   (.services-one__read-more is now .services-one__cta, styled in
+   css/service-cards.css, so it's excluded from this group.) */
 .services-one__all-services-inner p a,
 .services-one__top-icon span,
 .services-one__top-left .section-title__tagline,
@@ -740,20 +718,8 @@
    ========================================================================== */
 
 @media (max-width: 767px) {
-  /* BUG: .services-one__list was hard-set to flex: 0 0 24% (desktop 4-up
-     grid) with no responsive override, so on mobile the cards wedged onto
-     rows at odd widths, wrapping their heading/"Read More" text and
-     colliding with the back-to-top button. Requested layout: 2 per row on
-     mobile, sized around the 10px gap set on .services-one__list-box. */
-  .services-one__list {
-    flex: 0 0 calc(50% - 5px);
-  }
-  .services-one__single {
-    padding: 28px 20px 24px;
-  }
-  .services-one__icon span {
-    font-size: 44px !important;
-  }
+  /* .services-one__list mobile grid (2-up / 1-up under 380px) now lives in
+     css/service-cards.css alongside the rest of the card redesign. */
 
   /* BUG: testimonial owl-carousel's dot pagination is absolutely positioned
      bottom-right over the card; on narrow widths the reviewer's

@@ -1,0 +1,96 @@
+/* ==========================================================================
+   Brands We Repair — new section added per client FRD v1.1
+   ("Homepage Sections" list includes "Brands We Repair", which the page
+   didn't have). Loaded only on index2.html — index.html is untouched.
+   Reuses the theme's .section-title header pattern and the site's existing
+   glass/orange design language; no other section was modified.
+   ========================================================================== */
+
+.brands-one {
+  background-color: var(--panel-tint-warm, #fdf3e9);
+  padding: 100px 0 110px;
+}
+
+.brands-one__title {
+  margin-bottom: 14px;
+}
+
+.brands-one__subtitle {
+  max-width: 560px;
+  color: var(--ink-soft, #4a5568);
+  font-size: 16px;
+  line-height: 1.6;
+  margin-bottom: 44px;
+}
+
+.brands-one__grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 18px;
+}
+
+.brands-one__item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 92px;
+  padding: 20px 16px;
+  background: var(--glass-bg, rgba(255, 255, 255, 0.6));
+  border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.7));
+  border-radius: var(--glass-radius, 16px);
+  box-shadow: var(--glass-shadow, 0 4px 20px rgba(11, 27, 69, 0.06));
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.brands-one__item span {
+  font-family: var(--assimox-font-two, inherit);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--ink, #0b1a3a);
+  letter-spacing: 0.01em;
+  text-align: center;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  /* !important needed: these cards also carry .wow.fadeInUp for the
+     entrance animation, and glassmorphism.css's .wow.reveal-in sets
+     transform: none !important once revealed, which would otherwise
+     permanently block this hover lift. */
+  .brands-one__item:hover {
+    transform: translateY(-6px) !important;
+    box-shadow: 0 14px 28px rgba(11, 27, 69, 0.12);
+    border-color: var(--assimox-primary, #ff9d1e);
+  }
+  .brands-one__item:hover span {
+    color: var(--assimox-primary, #ff9d1e);
+  }
+}
+
+@media (max-width: 1080px) {
+  .brands-one__grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 767px) {
+  .brands-one {
+    padding: 56px 0;
+  }
+  .brands-one__grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+  .brands-one__item {
+    min-height: 76px;
+    padding: 14px 10px;
+  }
+  .brands-one__item span {
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 379px) {
+  .brands-one__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
