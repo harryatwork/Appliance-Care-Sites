@@ -696,6 +696,43 @@
   transform: none !important;
 }
 
+/* ==========================================================================
+   Preloader — logo icon
+   Replaces the theme's default spinner ring + letter-by-letter "Assimox"
+   text animation with the Sure Fix logo mark (images/logo.png).
+   ========================================================================== */
+
+.preloader-logo {
+  width: 90px;
+  height: 90px;
+  margin: 0 auto 20px;
+  animation: preloader-pulse 1.4s ease-in-out infinite;
+}
+
+.preloader-logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+@keyframes preloader-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(0.85);
+    opacity: 0.65;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .preloader-logo {
+    animation: none;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .wow.fadeInLeft,
   .wow.fadeInRight,
