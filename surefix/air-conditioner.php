@@ -5,12 +5,19 @@ $pageDescription = 'Air conditioner repair and servicing in Bengaluru — split,
 $applianceName = 'Air Conditioner';
 $applianceIconClass = 'fa-wind';
 $heroTagline = 'Split, window or cassette AC — gas top-up, deep cleaning, PCB and compressor repair from our most-booked service team.';
+$bannerImage = 'air-conditioner.jpg';
 
-$typeOptions = ['Split AC', 'Window AC', 'Cassette AC', 'Portable AC'];
+$typeOptions = ['Split AC', 'Tower AC', 'Window AC', 'Central AC', 'Not Sure'];
 
-$problemOptions = [
-    'Not Cooling', 'Water Leakage', 'Strange Noise', 'Bad Odor',
-    'Remote / Display Not Working', 'Gas Leakage', 'Not Turning On', 'Other',
+$problemGroups = [
+    'Repair' => [
+        'Unknown Issue', 'Not Cooling', 'Power Issue', 'Water Leakage',
+        'Making Noise', 'Bad Smell', 'Remote Issue',
+    ],
+    'Service' => [
+        'Installation', 'Uninstallation', 'Both Installation & Uninstallation',
+        'Cleaning', 'Gas Refill', 'General Service', 'Not Sure',
+    ],
 ];
 
 $commonIssues = [

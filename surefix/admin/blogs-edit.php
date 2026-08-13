@@ -14,34 +14,31 @@ if ($id) {
 $errors = [];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $title        = trim($_POST['title'] ?? '');
-    $slug         = trim($_POST['slug'] ?? '');
-    $service_id   = (int)($_POST['service_id'] ?? 0) ?: null;
-    $excerpt      = trim($_POST['excerpt'] ?? '');
-    $content      = trim($_POST['content'] ?? '');
-    $image_url    = trim($_POST['image_url'] ?? '');
-    $author       = trim($_POST['author'] ?? 'We Assist Team');
+    $title       = trim($_POST['title'] ?? '');
+    $slug        = trim($_POST['slug'] ?? '');
+    $category_id = (int)($_POST['category_id'] ?? 0) ?: null;
+    $excerpt     = trim($_POST['excerpt'] ?? '');
+    $content     = trim($_POST['content'] ?? '');
+    $image_url   = trim($_POST['image_url'] ?? '');
+    $author      = trim($_POST['author'] ?? 'Sure Fix Team');
+    $status      = ($_POST['status'] ?? 'published') === 'draft' ? 'draft' : 'published';
+    $published_at = trim($_POST['published_at'] ?? '') ?: date('Y-m-d H:i:s');
 
     // Handle file upload (takes priority over URL)
     if (!empty($_FILES['image_file']['name']) && $_FILES['image_file']['error'] === UPLOAD_ERR_OK) {
         $uploadDir = __DIR__ . '/../assets/images/blogs/';
         if (!is_dir($uploadDir)) mkdir($uploadDir, 0755, true);
         $ext  = strtolower(pathinfo($_FILES['image_file']['name'], PATHINFO_EXTENSION));
-        $allowed = ['jpg','jpeg','png','gif','webp','svg'];
-        if (in_array($ext, $allowed)) {
+        $allowed = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+        if (in_array($ext, $allowed, true) && $_FILES['image_file']['size'] <= 5 * 1024 * 1024) {
             $filename = time() . '-' . preg_replace('/[^a-z0-9]+/', '-', strtolower(pathinfo($_FILES['image_file']['name'], PATHINFO_FILENAME))) . '.' . $ext;
             if (move_uploaded_file($_FILES['image_file']['tmp_name'], $uploadDir . $filename)) {
                 $image_url = 'assets/images/blogs/' . $filename;
             }
         } else {
-            $errors[] = 'Image must be jpg, png, gif, webp, or svg.';
+            $errors[] = 'Image must be jpg, png, gif or webp, and under 5MB.';
         }
     }
-    $topic        = trim($_POST['topic'] ?? '');
-    $read_time    = trim($_POST['read_time'] ?? '5 min read');
-    $sort_order   = (int)($_POST['sort_order'] ?? 0);
-    $is_active    = isset($_POST['is_active']) ? 1 : 0;
-    $published_at = trim($_POST['published_at'] ?? '') ?: date('Y-m-d H:i:s');
 
     // Auto-generate slug
     if ($slug === '' && $title !== '') {
@@ -50,8 +47,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $slug = trim($slug, '-');
     }
 
-    if ($title === '') $errors[] = 'Title is required.';
-    if ($slug === '')  $errors[] = 'Slug is required.';
+    if ($title === '')   $errors[] = 'Title is required.';
+    if ($slug === '')    $errors[] = 'Slug is required.';
+    if ($content === '') $errors[] = 'Content is required.';
 
     // Check slug uniqueness
     if (empty($errors)) {
@@ -63,21 +61,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($errors)) {
         if ($id) {
             db()->prepare(
-                'UPDATE blog_posts SET title=?, slug=?, service_id=?, excerpt=?, content=?, image_url=?, author=?, topic=?, read_time=?, sort_order=?, is_active=?, published_at=? WHERE id=?'
-            )->execute([$title, $slug, $service_id, $excerpt, $content, $image_url, $author, $topic, $read_time, $sort_order, $is_active, $published_at, $id]);
+                'UPDATE blog_posts SET title=?, slug=?, category_id=?, excerpt=?, content=?, image_url=?, author=?, status=?, published_at=? WHERE id=?'
+            )->execute([$title, $slug, $category_id, $excerpt, $content, $image_url, $author, $status, $published_at, $id]);
         } else {
             db()->prepare(
-                'INSERT INTO blog_posts (title, slug, service_id, excerpt, content, image_url, author, topic, read_time, sort_order, is_active, published_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)'
-            )->execute([$title, $slug, $service_id, $excerpt, $content, $image_url, $author, $topic, $read_time, $sort_order, $is_active, $published_at]);
+                'INSERT INTO blog_posts (title, slug, category_id, excerpt, content, image_url, author, status, published_at) VALUES (?,?,?,?,?,?,?,?,?)'
+            )->execute([$title, $slug, $category_id, $excerpt, $content, $image_url, $author, $status, $published_at]);
         }
         header('Location: blogs.php?saved=1');
         exit;
     }
 
-    $item = compact('title', 'slug', 'service_id', 'excerpt', 'content', 'image_url', 'author', 'topic', 'read_time', 'sort_order', 'is_active', 'published_at');
+    $item = compact('title', 'slug', 'category_id', 'excerpt', 'content', 'image_url', 'author', 'status', 'published_at');
 }
 
-$services = db()->query('SELECT id, name FROM services WHERE is_active = 1 ORDER BY name ASC')->fetchAll();
+$categories = db()->query('SELECT id, name FROM blog_categories ORDER BY name ASC')->fetchAll();
 
 $PAGE_TITLE = $id ? 'Edit Blog Post' : 'Add Blog Post';
 $ACTIVE_NAV = 'blogs';
@@ -99,6 +97,13 @@ include '_header.php';
   <div class="alert alert--error"><i class="fa-solid fa-circle-exclamation"></i> <?= htmlspecialchars($e) ?></div>
   <?php endforeach; ?>
 
+  <?php if (empty($categories)): ?>
+  <div class="alert alert--info">
+    <i class="fa-solid fa-circle-info"></i> No categories yet —
+    <a href="blog-categories.php">add one</a> first (optional, posts can also have no category).
+  </div>
+  <?php endif; ?>
+
   <form method="POST" enctype="multipart/form-data">
 
     <div class="form-group">
@@ -116,11 +121,11 @@ include '_header.php';
                placeholder="7-simple-habits-to-keep-your-fridge">
       </div>
       <div class="form-group">
-        <label for="service_id">Category (Service)</label>
-        <select id="service_id" name="service_id">
+        <label for="category_id">Category</label>
+        <select id="category_id" name="category_id">
           <option value="0">— None —</option>
-          <?php foreach ($services as $svc): ?>
-            <option value="<?= $svc['id'] ?>" <?= ($item['service_id'] ?? 0) == $svc['id'] ? 'selected' : '' ?>><?= htmlspecialchars($svc['name']) ?></option>
+          <?php foreach ($categories as $cat): ?>
+            <option value="<?= $cat['id'] ?>" <?= ($item['category_id'] ?? 0) == $cat['id'] ? 'selected' : '' ?>><?= htmlspecialchars($cat['name']) ?></option>
           <?php endforeach; ?>
         </select>
       </div>
@@ -142,7 +147,7 @@ include '_header.php';
     <div class="form-group">
       <label for="image_file">Featured Image (Upload)</label>
       <input type="file" id="image_file" name="image_file" accept="image/*">
-      <p class="form-hint">Upload an image, or provide a URL below instead.</p>
+      <p class="form-hint">Upload an image, or provide a URL below instead. Max 5MB.</p>
     </div>
 
     <div class="form-group">
@@ -159,23 +164,8 @@ include '_header.php';
       <div class="form-group">
         <label for="author">Author</label>
         <input type="text" id="author" name="author"
-               value="<?= htmlspecialchars($item['author'] ?? 'We Assist Team') ?>"
-               placeholder="We Assist Team">
-      </div>
-      <div class="form-group">
-        <label for="topic">Topic Tag</label>
-        <input type="text" id="topic" name="topic"
-               value="<?= htmlspecialchars($item['topic'] ?? '') ?>"
-               placeholder="e.g. maintenance, repair, buying guide">
-      </div>
-    </div>
-
-    <div class="form-row-2">
-      <div class="form-group">
-        <label for="read_time">Read Time</label>
-        <input type="text" id="read_time" name="read_time"
-               value="<?= htmlspecialchars($item['read_time'] ?? '5 min read') ?>"
-               placeholder="5 min read">
+               value="<?= htmlspecialchars($item['author'] ?? 'Sure Fix Team') ?>"
+               placeholder="Sure Fix Team">
       </div>
       <div class="form-group">
         <label for="published_at">Publish Date</label>
@@ -184,19 +174,12 @@ include '_header.php';
       </div>
     </div>
 
-    <div class="form-row-2">
-      <div class="form-group">
-        <label for="sort_order">Sort Order <span style="font-weight:400;color:#94a3b8">(lower = first)</span></label>
-        <input type="number" id="sort_order" name="sort_order" min="0" max="999"
-               value="<?= (int)($item['sort_order'] ?? 0) ?>">
-      </div>
-      <div class="form-group" style="display:flex;align-items:flex-end;padding-bottom:6px">
-        <label class="toggle">
-          <input type="checkbox" name="is_active" <?= ($item['is_active'] ?? 1) ? 'checked' : '' ?>>
-          <span class="toggle__track"></span>
-          Publish on website
-        </label>
-      </div>
+    <div class="form-group">
+      <label for="status">Status</label>
+      <select id="status" name="status">
+        <option value="published" <?= ($item['status'] ?? 'published') === 'published' ? 'selected' : '' ?>>Published (visible on website)</option>
+        <option value="draft" <?= ($item['status'] ?? '') === 'draft' ? 'selected' : '' ?>>Draft (hidden)</option>
+      </select>
     </div>
 
     <div style="display:flex;gap:10px;margin-top:8px">

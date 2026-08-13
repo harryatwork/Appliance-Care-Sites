@@ -5,12 +5,13 @@ $pageDescription = 'Same-day washing machine repair in Bengaluru — front load,
 $applianceName = 'Washing Machine';
 $applianceIconClass = 'fa-shirt';
 $heroTagline = 'Front load, top load or semi-automatic — our certified technicians fix it at your doorstep, usually the same day.';
+$bannerImage = 'washing-machine.jpg';
 
 $typeOptions = ['Front Load', 'Top Load', 'Semi Automatic'];
 
 $problemOptions = [
-    'Not Starting', 'Not Spinning', 'Water Leakage', 'Excessive Noise',
-    'Drainage Issue', 'Door Lock Problem', 'Display / Error Code', 'Other',
+    'Unknown Issue', 'No Power', 'No Spin', 'Draining Issue', 'Not Filling',
+    'Water Leakage', 'Noise/Vibration', 'Error Code', 'General Service',
 ];
 
 $commonIssues = [

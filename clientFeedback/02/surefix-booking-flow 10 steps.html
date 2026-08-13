@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sure Fix — Book a Repair</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --orange:#FF6B00;
+  --orange-dark:#DE5900;
+  --orange-light:#FFF1E6;
+  --orange-glow:rgba(255,107,0,.20);
+  --bg:#FFFFFF;
+  --surface:#F7F7F9;
+  --surface-2:#FBFBFC;
+  --border:#E9E9EE;
+  --border-strong:#DEDEE4;
+  --text:#17171B;
+  --text-muted:#6B6B76;
+  --text-faint:#A1A1AA;
+  --success:#16A34A;
+  --success-bg:#EEFBF3;
+  --danger:#E5484D;
+  --danger-bg:#FDECEC;
+  --r-lg:16px;
+  --r-md:12px;
+  --r-sm:8px;
+  --shadow-sm:0 1px 2px rgba(20,20,25,.05);
+  --shadow-md:0 10px 30px -12px rgba(20,20,25,.16);
+  --shadow-orange:0 10px 26px -10px rgba(255,107,0,.45);
+  --header-h:64px;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  font-family:'Inter',sans-serif;
+  background:var(--surface);
+  color:var(--text);
+  -webkit-font-smoothing:antialiased;
+  line-height:1.45;
+}
+h1,h2,h3,h4,.font-display{font-family:'Sora',sans-serif;}
+button{font-family:inherit;}
+img,svg{display:block;}
+.icon{fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;}
+:focus-visible{outline:2.5px solid var(--orange);outline-offset:2px;border-radius:4px;}
+
+/* ---------- Top bar ---------- */
+.topbar{
+  position:sticky;top:0;z-index:40;
+  height:var(--header-h);
+  background:rgba(255,255,255,.92);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;
+}
+.topbar-inner{
+  max-width:1220px;margin:0 auto;width:100%;
+  padding:0 20px;display:flex;align-items:center;justify-content:space-between;gap:16px;
+}
+.logo{display:flex;align-items:center;gap:9px;font-family:'Sora';font-weight:700;font-size:19px;letter-spacing:-.01em;color:var(--text);text-decoration:none;}
+.logo-mark{width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,var(--orange),#FF8A3D);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:var(--shadow-orange);}
+.logo-mark svg{width:18px;height:18px;stroke:#fff;}
+.logo small{color:var(--orange);}
+.topbar-meta{display:flex;align-items:center;gap:18px;font-size:13px;color:var(--text-muted);}
+.trust-chip{display:flex;align-items:center;gap:6px;}
+.trust-chip svg{width:14px;height:14px;stroke:var(--orange);fill:var(--orange);}
+.call-btn{display:flex;align-items:center;gap:7px;background:var(--orange-light);color:var(--orange-dark);border:none;padding:8px 14px;border-radius:999px;font-weight:600;font-size:13px;text-decoration:none;white-space:nowrap;}
+@media (max-width:720px){ .topbar-meta .trust-chip{display:none;} }
+
+/* ---------- Progress ---------- */
+.progress-wrap{
+  position:sticky; top:var(--header-h); z-index:35;
+  background:#fff;border-bottom:1px solid var(--border);
+}
+.progress-inner{max-width:1220px;margin:0 auto;padding:14px 20px 12px;}
+.progress-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.progress-label{font-size:12.5px;font-weight:600;color:var(--text-muted);letter-spacing:.02em;text-transform:uppercase;}
+.progress-pct{font-size:12.5px;font-weight:700;color:var(--orange);}
+.progress-track{position:relative;height:6px;background:var(--border);border-radius:99px;overflow:hidden;}
+.progress-fill{position:absolute;inset:0 auto 0 0;width:0%;background:linear-gradient(90deg,var(--orange),#FF8A3D);border-radius:99px;transition:width .45s cubic-bezier(.65,0,.35,1);}
+.step-nodes{display:none;}
+@media (min-width:860px){
+  .progress-track{display:none;}
+  .step-nodes{display:flex;align-items:flex-start;justify-content:space-between;position:relative;margin-top:4px;}
+  .step-nodes::before{content:'';position:absolute;top:13px;left:22px;right:22px;height:2px;background:var(--border);z-index:0;}
+  .step-nodes::after{content:'';position:absolute;top:13px;left:22px;height:2px;background:var(--orange);z-index:1;width:var(--fill,0%);transition:width .45s cubic-bezier(.65,0,.35,1);}
+  .step-node{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:6px;flex:1;}
+  .node-dot{width:26px;height:26px;border-radius:50%;background:#fff;border:2px solid var(--border-strong);display:flex;align-items:center;justify-content:center;font-size:11.5px;font-weight:700;color:var(--text-faint);transition:all .25s ease;}
+  .node-label{font-size:10.5px;color:var(--text-faint);font-weight:600;text-align:center;max-width:76px;}
+  .step-node.done .node-dot{background:var(--orange);border-color:var(--orange);color:#fff;}
+  .step-node.done .node-dot svg{width:12px;height:12px;stroke:#fff;stroke-width:3;}
+  .step-node.active .node-dot{border-color:var(--orange);color:var(--orange);box-shadow:0 0 0 5px var(--orange-glow);background:#fff;}
+  .step-node.active .node-label{color:var(--orange);}
+}
+
+/* ---------- Layout ---------- */
+.shell{max-width:1220px;margin:0 auto;padding:28px 20px 130px;}
+.flow-grid{display:grid;grid-template-columns:1fr;gap:24px;align-items:start;}
+@media (min-width:960px){
+  .flow-grid{grid-template-columns:1fr 360px;gap:32px;}
+  .shell{padding-bottom:48px;}
+}
+.main-col{min-width:0;}
+.step-head{margin-bottom:22px;}
+.step-eyebrow{font-size:12.5px;font-weight:700;color:var(--orange);text-transform:uppercase;letter-spacing:.06em;margin:0 0 8px;}
+.step-title{font-size:26px;font-weight:700;margin:0 0 6px;letter-spacing:-.01em;}
+.step-sub{font-size:14.5px;color:var(--text-muted);margin:0;max-width:60ch;}
+@media (min-width:720px){ .step-title{font-size:30px;} }
+
+.card-panel{background:#fff;border:1px solid var(--border);border-radius:var(--r-lg);padding:22px;box-shadow:var(--shadow-sm);}
+
+/* ---------- Option grids / cards ---------- */
+.option-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;}
+.option-grid.cols-3{grid-template-columns:repeat(2,1fr);}
+.option-grid.cols-brand{grid-template-columns:repeat(2,1fr);}
+.option-grid.cols-wide{grid-template-columns:1fr;}
+@media (min-width:560px){
+  .option-grid.cols-3{grid-template-columns:repeat(3,1fr);}
+  .option-grid.cols-brand{grid-template-columns:repeat(3,1fr);}
+}
+@media (min-width:960px){
+  .option-grid{grid-template-columns:repeat(3,1fr);}
+  .option-grid.cols-brand{grid-template-columns:repeat(4,1fr);}
+}
+
+.option-card{
+  position:relative;background:#fff;border:1.5px solid var(--border);border-radius:var(--r-lg);
+  padding:18px 14px 16px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:10px;
+  cursor:pointer;transition:transform .16s ease, box-shadow .2s ease, border-color .2s ease, background .2s ease;
+  -webkit-tap-highlight-color:transparent;
+}
+.option-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-md);border-color:#F5C9A0;}
+.option-card:active{transform:translateY(-1px) scale(.98);}
+.option-card.selected{border-color:var(--orange);background:var(--orange-light);box-shadow:var(--shadow-orange);}
+.option-icon-wrap{width:56px;height:56px;border-radius:14px;background:var(--surface);display:flex;align-items:center;justify-content:center;transition:background .2s ease;flex-shrink:0;}
+.option-card.selected .option-icon-wrap{background:#fff;}
+.option-icon-wrap svg{width:30px;height:30px;color:var(--text);}
+.option-card.selected .option-icon-wrap svg{color:var(--orange);}
+.option-name{font-weight:600;font-size:13.5px;color:var(--text);line-height:1.25;}
+.option-desc{font-size:11.5px;color:var(--text-muted);}
+.check-badge{position:absolute;top:9px;right:9px;width:20px;height:20px;border-radius:50%;background:var(--orange);display:flex;align-items:center;justify-content:center;opacity:0;transform:scale(.5);transition:all .2s cubic-bezier(.34,1.56,.64,1);}
+.option-card.selected .check-badge{opacity:1;transform:scale(1);}
+.check-badge svg{width:11px;height:11px;stroke:#fff;stroke-width:3.4;}
+
+/* compact cards (brand / small) */
+.option-card.compact{padding:14px 10px;flex-direction:row;gap:10px;text-align:left;}
+.option-card.compact .option-icon-wrap{width:38px;height:38px;border-radius:10px;}
+.option-card.compact .option-icon-wrap svg{width:20px;height:20px;}
+.brand-badge{width:38px;height:38px;border-radius:10px;background:var(--surface);display:flex;align-items:center;justify-content:center;font-family:'Sora';font-weight:700;font-size:13px;color:var(--text-muted);flex-shrink:0;}
+.option-card.selected .brand-badge{background:#fff;color:var(--orange);}
+
+/* wide row cards (service / slots / areas) */
+.row-card{
+  position:relative;background:#fff;border:1.5px solid var(--border);border-radius:var(--r-lg);
+  padding:16px 18px;display:flex;align-items:center;gap:14px;cursor:pointer;
+  transition:transform .15s ease, box-shadow .2s ease, border-color .2s ease, background .2s ease;
+}
+.row-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-md);border-color:#F5C9A0;}
+.row-card.selected{border-color:var(--orange);background:var(--orange-light);box-shadow:var(--shadow-orange);}
+.row-icon{width:44px;height:44px;border-radius:12px;background:var(--surface);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.row-icon svg{width:24px;height:24px;color:var(--text);}
+.row-card.selected .row-icon{background:#fff;}
+.row-card.selected .row-icon svg{color:var(--orange);}
+.row-body{flex:1;min-width:0;}
+.row-title{font-weight:600;font-size:14.5px;display:flex;align-items:center;gap:8px;}
+.row-sub{font-size:12.5px;color:var(--text-muted);margin-top:2px;}
+.row-price{font-family:'Sora';font-weight:700;font-size:14px;color:var(--text);white-space:nowrap;}
+.badge-rec{font-size:10px;font-weight:700;color:var(--orange-dark);background:var(--orange-light);padding:3px 8px;border-radius:99px;letter-spacing:.02em;text-transform:uppercase;}
+.row-check{width:22px;height:22px;border-radius:50%;border:2px solid var(--border-strong);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .2s ease;}
+.row-card.selected .row-check{background:var(--orange);border-color:var(--orange);}
+.row-check svg{width:12px;height:12px;stroke:#fff;stroke-width:3.4;opacity:0;transform:scale(.5);transition:all .2s ease;}
+.row-card.selected .row-check svg{opacity:1;transform:scale(1);}
+
+/* ---------- Buttons ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:12px;font-weight:600;font-size:14.5px;padding:13px 22px;border:none;cursor:pointer;transition:transform .12s ease, box-shadow .2s ease, opacity .2s ease, background .2s ease;white-space:nowrap;}
+.btn-primary{background:var(--orange);color:#fff;box-shadow:var(--shadow-orange);}
+.btn-primary:hover{background:var(--orange-dark);transform:translateY(-1px);}
+.btn-primary:active{transform:translateY(0) scale(.98);}
+.btn-primary:disabled{opacity:.42;box-shadow:none;cursor:not-allowed;transform:none;}
+.btn-secondary{background:#fff;color:var(--text);border:1.5px solid var(--border-strong);}
+.btn-secondary:hover{border-color:var(--text-faint);transform:translateY(-1px);}
+.btn-text{background:transparent;color:var(--text-muted);padding:13px 10px;}
+.btn-text:hover{color:var(--orange-dark);}
+.btn svg{width:16px;height:16px;}
+
+/* ---------- Footer nav ---------- */
+.flow-footer{
+  position:fixed;left:0;right:0;bottom:0;z-index:50;background:#fff;border-top:1px solid var(--border);
+  padding:12px 16px calc(12px + env(safe-area-inset-bottom));box-shadow:0 -8px 24px -12px rgba(20,20,25,.12);
+}
+.flow-footer-inner{max-width:1220px;margin:0 auto;display:flex;align-items:center;gap:10px;}
+.mobile-mini-summary{flex:1;min-width:0;display:flex;align-items:center;gap:10px;overflow:hidden;}
+.mms-icon{width:34px;height:34px;border-radius:9px;background:var(--orange-light);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.mms-icon svg{width:18px;height:18px;color:var(--orange);}
+.mms-text{min-width:0;}
+.mms-label{font-size:10.5px;color:var(--text-faint);font-weight:600;text-transform:uppercase;letter-spacing:.02em;}
+.mms-value{font-size:13.5px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+@media (min-width:960px){
+  .flow-footer{position:static;border-top:none;box-shadow:none;background:transparent;padding:28px 0 0;}
+  .mobile-mini-summary{display:none;}
+}
+
+/* ---------- Summary sidebar (desktop) ---------- */
+.summary-side{position:sticky;top:calc(var(--header-h) + 84px);display:none;}
+@media (min-width:960px){ .summary-side{display:block;} }
+.summary-card{background:#fff;border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--shadow-sm);}
+.summary-card-head{padding:18px 20px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:between;gap:10px;}
+.summary-card-head h3{margin:0;font-size:15px;}
+.summary-list{padding:6px 8px;}
+.summary-row{display:flex;align-items:flex-start;gap:11px;padding:11px 12px;border-radius:10px;}
+.summary-row + .summary-row{border-top:1px dashed var(--border);}
+.sr-icon{width:30px;height:30px;border-radius:8px;background:var(--surface);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+.sr-icon svg{width:16px;height:16px;color:var(--text-muted);}
+.summary-row.filled .sr-icon{background:var(--orange-light);}
+.summary-row.filled .sr-icon svg{color:var(--orange);}
+.sr-body{min-width:0;flex:1;}
+.sr-label{font-size:11px;color:var(--text-faint);font-weight:600;text-transform:uppercase;letter-spacing:.02em;}
+.sr-value{font-size:13.5px;font-weight:600;color:var(--text-faint);margin-top:2px;}
+.summary-row.filled .sr-value{color:var(--text);}
+.summary-card-foot{padding:16px 20px;background:var(--surface);border-top:1px solid var(--border);}
+.est-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;}
+.est-label{font-size:12.5px;color:var(--text-muted);}
+.est-value{font-family:'Sora';font-weight:700;font-size:16px;}
+.est-note{font-size:11px;color:var(--text-faint);}
+.trust-mini{display:flex;flex-wrap:wrap;gap:8px;padding:14px 20px 18px;}
+.trust-pill{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text-muted);background:var(--surface);padding:6px 10px;border-radius:99px;}
+.trust-pill svg{width:13px;height:13px;color:var(--orange);}
+
+/* ---------- Form fields ---------- */
+.field-group{margin-bottom:18px;}
+.field-label{display:block;font-size:13px;font-weight:600;color:var(--text);margin-bottom:8px;}
+.field-hint{font-size:12px;color:var(--text-faint);margin-top:6px;}
+.text-input{width:100%;padding:13px 14px;border:1.5px solid var(--border-strong);border-radius:12px;font-size:15px;font-family:inherit;color:var(--text);background:#fff;transition:border-color .18s ease, box-shadow .18s ease;}
+.text-input:focus{border-color:var(--orange);box-shadow:0 0 0 4px var(--orange-glow);outline:none;}
+.phone-input-row{display:flex;gap:8px;}
+.phone-prefix{display:flex;align-items:center;justify-content:center;padding:0 14px;border:1.5px solid var(--border-strong);border-radius:12px;font-weight:600;color:var(--text-muted);background:var(--surface);}
+.chip-row{display:flex;flex-wrap:wrap;gap:9px;}
+.chip{padding:9px 15px;border-radius:99px;border:1.5px solid var(--border-strong);background:#fff;font-size:13.5px;font-weight:600;color:var(--text);cursor:pointer;transition:all .18s ease;}
+.chip:hover{border-color:var(--orange);}
+.chip.selected{background:var(--orange);border-color:var(--orange);color:#fff;box-shadow:var(--shadow-orange);}
+.location-btn{display:flex;align-items:center;gap:10px;width:100%;padding:14px 16px;border-radius:12px;border:1.5px dashed var(--border-strong);background:var(--surface-2);font-weight:600;font-size:14px;color:var(--orange-dark);cursor:pointer;margin-bottom:20px;transition:all .18s ease;}
+.location-btn:hover{border-color:var(--orange);background:var(--orange-light);}
+.location-btn svg{width:19px;height:19px;color:var(--orange);flex-shrink:0;}
+.location-btn.active{border-style:solid;border-color:var(--success);background:var(--success-bg);color:#0F7C3E;}
+.location-btn.active svg{color:var(--success);}
+
+/* date strip */
+.date-strip{display:flex;gap:10px;overflow-x:auto;padding:4px 2px 12px;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.date-strip::-webkit-scrollbar{display:none;}
+.date-chip{flex-shrink:0;width:64px;padding:12px 0;border-radius:14px;border:1.5px solid var(--border);background:#fff;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;transition:all .18s ease;}
+.date-chip:hover{border-color:#F5C9A0;transform:translateY(-2px);}
+.date-chip.selected{background:var(--orange);border-color:var(--orange);box-shadow:var(--shadow-orange);}
+.dc-day{font-size:11px;color:var(--text-faint);font-weight:600;text-transform:uppercase;}
+.date-chip.selected .dc-day{color:rgba(255,255,255,.85);}
+.dc-num{font-family:'Sora';font-size:19px;font-weight:700;}
+.date-chip.selected .dc-num{color:#fff;}
+.dc-mon{font-size:10px;color:var(--text-faint);}
+.date-chip.selected .dc-mon{color:rgba(255,255,255,.85);}
+
+.emergency-card{display:flex;align-items:center;gap:14px;padding:16px 18px;border-radius:var(--r-lg);background:linear-gradient(135deg,#1A1A1E,#2B2B31);color:#fff;margin-bottom:18px;cursor:pointer;border:1.5px solid transparent;transition:all .2s ease;}
+.emergency-card:hover{transform:translateY(-2px);}
+.emergency-card.selected{border-color:var(--orange);box-shadow:var(--shadow-orange);}
+.emergency-icon{width:44px;height:44px;border-radius:12px;background:var(--orange);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.emergency-icon svg{width:22px;height:22px;stroke:#fff;fill:#fff;}
+.emergency-title{font-weight:700;font-size:14.5px;}
+.emergency-sub{font-size:12px;color:rgba(255,255,255,.65);margin-top:2px;}
+.emergency-check{margin-left:auto;width:22px;height:22px;border-radius:50%;border:2px solid rgba(255,255,255,.35);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.emergency-card.selected .emergency-check{background:var(--orange);border-color:var(--orange);}
+.emergency-check svg{width:11px;height:11px;stroke:#fff;stroke-width:3.4;opacity:0;}
+.emergency-card.selected .emergency-check svg{opacity:1;}
+
+/* OTP */
+.otp-row{display:flex;gap:10px;margin:6px 0 4px;}
+.otp-box{width:52px;height:58px;text-align:center;font-size:22px;font-weight:700;font-family:'Sora';border:1.5px solid var(--border-strong);border-radius:12px;background:#fff;transition:all .15s ease;}
+.otp-box:focus{border-color:var(--orange);box-shadow:0 0 0 4px var(--orange-glow);outline:none;}
+.otp-box.error{border-color:var(--danger);animation:shake .35s ease;}
+.otp-box.success{border-color:var(--success);background:var(--success-bg);}
+@keyframes shake{10%,90%{transform:translateX(-1px);}20%,80%{transform:translateX(2px);}30%,50%,70%{transform:translateX(-4px);}40%,60%{transform:translateX(4px);}}
+.otp-error-msg{display:flex;align-items:center;gap:7px;color:var(--danger);background:var(--danger-bg);font-size:12.5px;font-weight:600;padding:9px 12px;border-radius:10px;margin-top:10px;}
+.otp-error-msg svg{width:15px;height:15px;flex-shrink:0;}
+.otp-success-msg{display:flex;align-items:center;gap:7px;color:var(--success);background:var(--success-bg);font-size:12.5px;font-weight:600;padding:9px 12px;border-radius:10px;margin-top:10px;}
+.otp-success-msg svg{width:15px;height:15px;flex-shrink:0;}
+.otp-meta{display:flex;align-items:center;justify-content:space-between;margin-top:16px;font-size:13px;}
+.resend-link{background:none;border:none;color:var(--orange-dark);font-weight:600;cursor:pointer;font-size:13px;}
+.resend-link:disabled{color:var(--text-faint);cursor:default;}
+.contact-verified-chip{display:flex;align-items:center;gap:8px;background:var(--success-bg);color:#0F7C3E;padding:10px 14px;border-radius:12px;font-weight:600;font-size:13.5px;margin-top:14px;}
+.contact-verified-chip svg{width:16px;height:16px;}
+.demo-hint{font-size:11.5px;color:var(--text-faint);background:var(--surface);border:1px dashed var(--border-strong);padding:8px 11px;border-radius:9px;margin-top:14px;}
+
+/* Summary screen (step 9) */
+.summary-screen-grid{display:grid;grid-template-columns:1fr;gap:14px;}
+.sum-block{background:#fff;border:1px solid var(--border);border-radius:var(--r-lg);padding:16px 18px;display:flex;align-items:center;gap:14px;}
+.sum-block .row-icon{background:var(--orange-light);}
+.sum-block .row-icon svg{color:var(--orange);}
+.sum-block .row-body{flex:1;}
+.sum-block .sr-label2{font-size:11.5px;color:var(--text-faint);font-weight:600;text-transform:uppercase;letter-spacing:.02em;}
+.sum-block .sr-value2{font-size:14.5px;font-weight:600;margin-top:2px;}
+.sum-edit{background:none;border:none;color:var(--orange-dark);font-weight:600;font-size:13px;cursor:pointer;display:flex;align-items:center;gap:5px;flex-shrink:0;}
+.sum-edit svg{width:13px;height:13px;}
+.price-card{background:linear-gradient(135deg,#1A1A1E,#2B2B31);color:#fff;border-radius:var(--r-lg);padding:22px;margin-top:6px;}
+.price-top{display:flex;align-items:center;justify-content:space-between;}
+.price-label{font-size:13px;color:rgba(255,255,255,.65);}
+.price-value{font-family:'Sora';font-size:28px;font-weight:700;color:var(--orange);}
+.price-note{font-size:12px;color:rgba(255,255,255,.55);margin-top:8px;}
+.trust-row-final{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px;}
+.trust-row-final .trust-pill{background:rgba(255,255,255,.08);color:rgba(255,255,255,.85);}
+.trust-row-final .trust-pill svg{color:var(--orange);}
+
+/* success screen */
+.success-wrap{max-width:560px;margin:40px auto 0;text-align:center;}
+.success-check{width:96px;height:96px;border-radius:50%;background:var(--success-bg);display:flex;align-items:center;justify-content:center;margin:0 auto 22px;position:relative;}
+.success-check::before{content:'';position:absolute;inset:-8px;border-radius:50%;border:2px solid var(--success);opacity:.35;animation:pulse-ring 1.8s ease-out infinite;}
+@keyframes pulse-ring{0%{transform:scale(.85);opacity:.5;}100%{transform:scale(1.25);opacity:0;}}
+.success-check svg{width:46px;height:46px;stroke:var(--success);stroke-width:3;animation:draw 0.6s ease forwards;}
+.success-title{font-size:26px;font-weight:700;margin:0 0 8px;}
+.success-sub{color:var(--text-muted);font-size:15px;margin:0 0 26px;}
+.booking-id-card{display:inline-flex;flex-direction:column;gap:2px;background:var(--surface);border:1px dashed var(--border-strong);padding:12px 22px;border-radius:12px;margin-bottom:26px;}
+.booking-id-label{font-size:11px;color:var(--text-faint);font-weight:600;text-transform:uppercase;}
+.booking-id-value{font-family:'Sora';font-weight:700;font-size:18px;color:var(--orange-dark);letter-spacing:.03em;}
+.eta-card{background:#fff;border:1px solid var(--border);border-radius:var(--r-lg);padding:18px 20px;display:flex;align-items:center;gap:14px;text-align:left;margin-bottom:16px;box-shadow:var(--shadow-sm);}
+.eta-card .row-icon{background:var(--orange-light);}
+.eta-card .row-icon svg{color:var(--orange);}
+.next-steps{text-align:left;background:#fff;border:1px solid var(--border);border-radius:var(--r-lg);padding:18px 20px;margin-bottom:26px;}
+.next-steps h4{margin:0 0 12px;font-size:14px;}
+.ns-item{display:flex;gap:10px;font-size:13.5px;color:var(--text-muted);padding:7px 0;}
+.ns-item svg{width:16px;height:16px;color:var(--success);flex-shrink:0;margin-top:1px;}
+.success-actions{display:flex;flex-direction:column;gap:10px;}
+@media (min-width:520px){ .success-actions{flex-direction:row;justify-content:center;} }
+
+.fade-in{animation:fadeIn .35s ease both;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+@media (prefers-reduced-motion:reduce){
+  *{animation-duration:.001ms !important;transition-duration:.001ms !important;}
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="logo" href="#" onclick="return false;">
+      <span class="logo-mark"><svg class="icon" viewBox="0 0 48 48"><path d="M30 12a7 7 0 00-9 9L8 34l4 4 13-13a7 7 0 009-9l-5 5-4-4z"/></svg></span>
+      Sure<span style="color:var(--orange)">Fix</span>
+    </a>
+    <div class="topbar-meta">
+      <span class="trust-chip"><svg viewBox="0 0 24 24"><path d="M12 2l2.9 6 6.6.9-4.8 4.6 1.1 6.5-5.8-3-5.8 3 1.1-6.5-4.8-4.6 6.6-.9z"/></svg> 4.9 · 50,000+ repairs</span>
+      <a class="call-btn" href="tel:+911800456789">
+        <svg class="icon" viewBox="0 0 24 24" width="14" height="14"><path d="M15 4h5v5"/><path d="M19 4l-7 7"/><path d="M9 3H4v17h17v-5"/></svg>
+        1800-456-789
+      </a>
+    </div>
+  </div>
+</header>
+
+<div class="progress-wrap">
+  <div class="progress-inner">
+    <div class="progress-top">
+      <span class="progress-label" id="progressLabel">Step 1 of 9</span>
+      <span class="progress-pct" id="progressPct">11%</span>
+    </div>
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="step-nodes" id="stepNodes"></div>
+  </div>
+</div>
+
+<main class="shell">
+  <div class="flow-grid">
+    <div class="main-col">
+      <div id="stepContent" class="fade-in"></div>
+    </div>
+    <aside class="summary-side">
+      <div class="summary-card">
+        <div class="summary-card-head"><h3>Your booking</h3></div>
+        <div class="summary-list" id="summaryList"></div>
+        <div class="summary-card-foot">
+          <div class="est-row"><span class="est-label">Estimated visit charge</span><span class="est-value" id="estValue">₹—</span></div>
+          <div class="est-note">Final price confirmed after free diagnosis</div>
+        </div>
+        <div class="trust-mini">
+          <span class="trust-pill"><svg class="icon" viewBox="0 0 24 24"><path d="M12 2l7 3v6c0 5-3.5 8.5-7 10-3.5-1.5-7-5-7-10V5z"/></svg>Certified techs</span>
+          <span class="trust-pill"><svg class="icon" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>Genuine parts</span>
+          <span class="trust-pill"><svg class="icon" viewBox="0 0 24 24"><path d="M12 6v6l4 2"/><circle cx="12" cy="12" r="9"/></svg>Same-day service</span>
+        </div>
+      </div>
+    </aside>
+  </div>
+</main>
+
+<footer class="flow-footer" id="flowFooter"></footer>
+
+<script>
+/* =========================================================
+   ICON LIBRARY — inline SVG line-art, inherits currentColor
+   ========================================================= */
+const ICONS = {
+'category-cooling':'<path d="M24 6v36M10 14l28 20M38 14L10 34"/><path d="M24 6l-5 5M24 6l5 5M24 42l-5-5M24 42l5-5M10 14l3-7M10 14l7 3M38 14l-3-7M38 14l-7 3M10 34l3 7M10 34l7-3M38 34l-3 7M38 34l-7-3"/>',
+'category-kitchen':'<path d="M8 20a16 16 0 0132 0"/><rect x="8" y="20" width="32" height="6" rx="2"/><path d="M14 26l2 12h16l2-12"/>',
+'category-laundry':'<rect x="8" y="6" width="32" height="36" rx="4"/><circle cx="24" cy="26" r="10"/><circle cx="24" cy="26" r="5"/><circle cx="14" cy="12" r="1.4"/><circle cx="19" cy="12" r="1.4"/>',
+'category-entertainment':'<rect x="6" y="10" width="36" height="24" rx="3"/><path d="M18 40h12M24 34v6"/>',
+'category-water':'<path d="M24 6C24 6 12 22 12 30a12 12 0 0024 0c0-8-12-24-12-24z"/>',
+'type-split-ac':'<rect x="6" y="14" width="36" height="14" rx="4"/><path d="M10 28l-2 6M18 28l-1 6M30 28l1 6M38 28l2 6"/><circle cx="34" cy="21" r="2"/>',
+'type-window-ac':'<rect x="6" y="12" width="36" height="24" rx="3"/><rect x="10" y="16" width="28" height="4" rx="1"/><path d="M10 24h28M10 30h28"/>',
+'type-cassette-ac':'<rect x="10" y="10" width="28" height="28" rx="4"/><rect x="16" y="16" width="16" height="16" rx="2"/><path d="M4 14h6M4 24h6M4 34h6M38 14h6M38 24h6M38 34h6"/>',
+'type-tower-ac':'<rect x="16" y="4" width="16" height="40" rx="6"/><path d="M20 14h8M20 22h8M20 30h8"/>',
+'type-ductable-ac':'<rect x="4" y="18" width="40" height="10" rx="2"/><path d="M10 28v4M18 28v6M30 28v6M38 28v4"/>',
+'type-fridge':'<rect x="12" y="4" width="24" height="40" rx="4"/><path d="M12 18h24"/><path d="M18 8v6M18 24v6"/>',
+'type-washing-machine':'<rect x="8" y="6" width="32" height="36" rx="4"/><circle cx="24" cy="27" r="11"/><circle cx="24" cy="27" r="6"/><path d="M16 12h4"/>',
+'type-tv':'<rect x="6" y="8" width="36" height="22" rx="3"/><path d="M18 36h12M24 30v6"/><path d="M14 8l6-4M34 8l-6-4"/>',
+'type-microwave':'<rect x="6" y="12" width="36" height="24" rx="3"/><rect x="10" y="16" width="20" height="16" rx="2"/><circle cx="35" cy="20" r="2"/><path d="M32 26h6M32 30h6"/>',
+'type-dishwasher':'<rect x="8" y="6" width="32" height="36" rx="3"/><circle cx="24" cy="14" r="2"/><path d="M12 22h24M12 28h24M12 34h24"/>',
+'type-chimney':'<path d="M14 44V22a10 10 0 0120 0v22"/><rect x="10" y="8" width="28" height="8" rx="2"/><path d="M18 44h12"/>',
+'type-water-purifier':'<rect x="16" y="6" width="16" height="30" rx="4"/><path d="M20 36v4a4 4 0 004 4 4 4 0 004-4v-4"/><path d="M20 16h8"/>',
+'type-geyser':'<rect x="14" y="6" width="20" height="36" rx="8"/><path d="M20 16h8M20 24h8"/>',
+'problem-not-cooling':'<path d="M26 6a4 4 0 00-4 4v16.5a7 7 0 104 0V10a4 4 0 000-4z"/><path d="M10 20v10M10 30l-4-4M10 30l4-4"/>',
+'problem-water-leak':'<path d="M24 6c0 0-9 12-9 19a9 9 0 0018 0c0-7-9-19-9-19z"/><path d="M14 38l-2 6M34 38l2 6"/>',
+'problem-gas-leak':'<path d="M14 30a8 8 0 01-2-15.7A10 10 0 0132 10a8 8 0 016 14"/><path d="M14 30h22a5 5 0 000-10"/><path d="M24 34v6M24 44h.01"/>',
+'problem-noise':'<path d="M8 20v8"/><path d="M16 14v20"/><path d="M24 8v32"/><path d="M32 14v20"/><path d="M40 20v8"/>',
+'problem-not-turning-on':'<circle cx="24" cy="26" r="14"/><path d="M24 14v10"/>',
+'problem-no-display':'<rect x="8" y="12" width="32" height="20" rx="3"/><path d="M18 40h12M24 32v8"/><path d="M16 18l16 8M32 18l-16 8"/>',
+'problem-bad-smell':'<path d="M18 10c-4 4-6 9-6 14a12 12 0 0024 0"/><path d="M32 16c2-2 5-2 7 0"/><path d="M32 22c2-2 5-2 7 0"/>',
+'problem-ice':'<rect x="14" y="14" width="20" height="20" rx="3"/><path d="M24 14v20M14 24h20M18 18l12 12M30 18L18 30"/>',
+'problem-weak-airflow':'<circle cx="24" cy="24" r="4"/><path d="M24 20c-2-6 2-11 8-10M28 24c6-2 11 2 10 8M24 28c2 6-2 11-8 10M20 24c-6 2-11-2-10-8"/>',
+'problem-remote':'<rect x="17" y="6" width="14" height="36" rx="5"/><circle cx="24" cy="14" r="2"/><path d="M20 22h8M20 28h8M20 34h8"/>',
+'problem-vibration':'<rect x="16" y="12" width="16" height="24" rx="3"/><path d="M8 16v16M40 16v16M4 20v8M44 20v8"/>',
+'problem-tripping':'<rect x="14" y="8" width="20" height="32" rx="3"/><path d="M20 18h8M20 26h8"/><circle cx="24" cy="34" r="2"/>',
+'problem-installation':'<path d="M30 12a7 7 0 00-9 9L8 34l4 4 13-13a7 7 0 009-9l-5 5-4-4z"/><path d="M38 8v8M34 12h8"/>',
+'problem-uninstallation':'<path d="M30 12a7 7 0 00-9 9L8 34l4 4 13-13a7 7 0 009-9l-5 5-4-4z"/><path d="M34 12h8"/>',
+'problem-maintenance':'<circle cx="22" cy="24" r="8"/><path d="M22 12v4M22 32v4M10 24h4M30 24h4M13 15l3 3M31 15l-3 3M13 33l3-3M31 33l-3-3"/><path d="M32 32l4 4 8-8"/>',
+'problem-other':'<path d="M8 22a14 14 0 1122 11l4 6-7-2A14 14 0 018 22z"/><circle cx="17" cy="22" r="1.5"/><circle cx="24" cy="22" r="1.5"/><circle cx="31" cy="22" r="1.5"/>',
+'service-diagnosis':'<rect x="8" y="6" width="20" height="26" rx="3"/><path d="M13 13h10M13 19h10M13 25h6"/><circle cx="32" cy="30" r="7"/><path d="M37 35l5 5"/>',
+'service-repair':'<path d="M14 34L30 18a7 7 0 009-9l-5 5-4-4 5-5a7 7 0 00-9 9L10 30z"/>',
+'service-parts':'<rect x="8" y="20" width="20" height="18" rx="2"/><path d="M8 26h20"/><circle cx="34" cy="16" r="7"/><path d="M34 6v4M34 22v4M24 16h4M40 16h4M27 9l3 3M41 9l-3 3M27 23l3-3M41 23l-3-3"/>',
+'service-install':'<path d="M8 16l16-8 16 8-16 8-16-8z"/><path d="M8 16v16l16 8 16-8V16"/><path d="M24 24v16"/>',
+'service-cleaning':'<path d="M20 42V22a4 4 0 014-4 4 4 0 014 4v20"/><path d="M18 42h12"/><path d="M14 12l2 4M24 8v5M34 12l-2 4"/>',
+'service-amc':'<path d="M24 6l14 6v10c0 10-6 17-14 20-8-3-14-10-14-20V12z"/><path d="M18 24l4 4 8-8"/>',
+'pin':'<path d="M24 44s14-13 14-24a14 14 0 10-28 0c0 11 14 24 14 24z"/><circle cx="24" cy="20" r="5"/>',
+'calendar':'<rect x="8" y="10" width="32" height="30" rx="3"/><path d="M8 18h32M16 6v8M32 6v8"/>',
+'clock':'<circle cx="24" cy="24" r="16"/><path d="M24 15v9l7 4"/>',
+'phone':'<rect x="15" y="4" width="18" height="40" rx="3"/><path d="M22 38h4"/>',
+'star':'<path d="M24 6l5.5 11.2 12.3 1.8-8.9 8.7 2.1 12.3L24 34l-11 6 2.1-12.3-8.9-8.7 12.3-1.8z"/>',
+'bolt':'<path d="M26 4L10 28h12l-2 16 18-26H26z"/>',
+'truck':'<rect x="4" y="16" width="24" height="16" rx="2"/><path d="M28 22h8l6 6v4h-14z"/><circle cx="14" cy="36" r="3"/><circle cx="34" cy="36" r="3"/>',
+'edit':'<path d="M6 34l2-8 20-20 6 6-20 20-8 2z"/><path d="M26 12l6 6"/>',
+'category-generic':'<rect x="8" y="8" width="32" height="32" rx="6"/>',
+'shield':'<path d="M24 6l14 6v10c0 10-6 17-14 20-8-3-14-10-14-20V12z"/>',
+'chat':'<path d="M8 10h32v20H20l-8 8V30H8z"/>'
+};
+function icon(name,cls){ return `<svg class="icon ${cls||''}" viewBox="0 0 48 48">${ICONS[name]||ICONS['category-generic']}</svg>`; }
+function checkIcon(){ return '<svg viewBox="0 0 24 24"><path d="M5 13l5 5L20 6"/></svg>'; }
+
+/* =========================================================
+   DATA
+   ========================================================= */
+const CATEGORIES=[
+ {id:'cooling',name:'Cooling & AC',desc:'ACs of every type',icon:'category-cooling'},
+ {id:'kitchen',name:'Kitchen & Cooking',desc:'Fridge, microwave & more',icon:'category-kitchen'},
+ {id:'laundry',name:'Laundry',desc:'Washing machines',icon:'category-laundry'},
+ {id:'entertainment',name:'Entertainment',desc:'Televisions',icon:'category-entertainment'},
+ {id:'water',name:'Water Systems',desc:'Purifiers & geysers',icon:'category-water'},
+];
+const APPLIANCES=[
+ {id:'split-ac',cat:'cooling',name:'Split AC',icon:'type-split-ac'},
+ {id:'window-ac',cat:'cooling',name:'Window AC',icon:'type-window-ac'},
+ {id:'cassette-ac',cat:'cooling',name:'Cassette AC',icon:'type-cassette-ac'},
+ {id:'tower-ac',cat:'cooling',name:'Tower AC',icon:'type-tower-ac'},
+ {id:'ductable-ac',cat:'cooling',name:'Ductable AC',icon:'type-ductable-ac'},
+ {id:'fridge',cat:'kitchen',name:'Refrigerator',icon:'type-fridge'},
+ {id:'microwave',cat:'kitchen',name:'Microwave',icon:'type-microwave'},
+ {id:'dishwasher',cat:'kitchen',name:'Dishwasher',icon:'type-dishwasher'},
+ {id:'chimney',cat:'kitchen',name:'Chimney',icon:'type-chimney'},
+ {id:'washing-machine',cat:'laundry',name:'Washing Machine',icon:'type-washing-machine'},
+ {id:'tv',cat:'entertainment',name:'Television',icon:'type-tv'},
+ {id:'water-purifier',cat:'water',name:'Water Purifier',icon:'type-water-purifier'},
+ {id:'geyser',cat:'water',name:'Geyser',icon:'type-geyser'},
+];
+const BRANDS=['LG','Samsung','Whirlpool','IFB','Bosch','Godrej','Voltas','Haier','Panasonic','Blue Star','Daikin','Hitachi','Other / Not sure'];
+const PROBLEMS=[
+ {id:'not-cooling',name:'Not Cooling',icon:'problem-not-cooling'},
+ {id:'water-leak',name:'Water Leakage',icon:'problem-water-leak'},
+ {id:'gas-leak',name:'Gas Leakage',icon:'problem-gas-leak'},
+ {id:'noise',name:'Unusual Noise',icon:'problem-noise'},
+ {id:'not-turning-on',name:'Not Turning On',icon:'problem-not-turning-on'},
+ {id:'no-display',name:'No Display',icon:'problem-no-display'},
+ {id:'bad-smell',name:'Bad Smell',icon:'problem-bad-smell'},
+ {id:'ice',name:'Ice Formation',icon:'problem-ice'},
+ {id:'weak-airflow',name:'Weak Airflow',icon:'problem-weak-airflow'},
+ {id:'remote',name:'Remote Issue',icon:'problem-remote'},
+ {id:'vibration',name:'Vibration',icon:'problem-vibration'},
+ {id:'tripping',name:'Tripping / Shock',icon:'problem-tripping'},
+ {id:'installation',name:'Installation',icon:'problem-installation'},
+ {id:'uninstallation',name:'Uninstallation',icon:'problem-uninstallation'},
+ {id:'maintenance',name:'Maintenance',icon:'problem-maintenance'},
+ {id:'other',name:'Other Issue',icon:'problem-other'},
+];
+const SERVICES=[
+ {id:'diagnosis',name:'Diagnosis & Quote',desc:'Technician inspects, then quotes before any work',price:'₹99',icon:'service-diagnosis'},
+ {id:'repair',name:'Repair Service',desc:'Fix the reported issue with genuine parts',price:'₹299–₹1,499',icon:'service-repair'},
+ {id:'parts',name:'Part Replacement',desc:'Swap a faulty component with an OEM part',price:'Quoted on site',icon:'service-parts'},
+ {id:'install',name:'Installation Service',desc:'Professional setup and testing',price:'₹499–₹1,299',icon:'service-install'},
+ {id:'cleaning',name:'Deep Cleaning',desc:'Full internal clean to restore performance',price:'₹399–₹799',icon:'service-cleaning'},
+ {id:'amc',name:'Annual Maintenance Plan',desc:'Scheduled visits + priority support all year',price:'₹1,999/yr',icon:'service-amc'},
+];
+const RECOMMENDED_SERVICE={ 'not-cooling':'repair','water-leak':'repair','gas-leak':'repair','noise':'diagnosis','not-turning-on':'diagnosis','no-display':'diagnosis','bad-smell':'cleaning','ice':'repair','weak-airflow':'cleaning','remote':'parts','vibration':'repair','tripping':'diagnosis','installation':'install','uninstallation':'install','maintenance':'amc','other':'diagnosis' };
+const AREAS=['Koramangala','Indiranagar','Whitefield','HSR Layout','Jayanagar','Marathahalli','Electronic City','Other Area'];
+const TIME_SLOTS=[
+ {id:'morning',name:'Morning',range:'8 AM – 11 AM',avail:'6 slots left'},
+ {id:'midday',name:'Midday',range:'11 AM – 2 PM',avail:'4 slots left'},
+ {id:'afternoon',name:'Afternoon',range:'2 PM – 5 PM',avail:'8 slots left'},
+ {id:'evening',name:'Evening',range:'5 PM – 8 PM',avail:'3 slots left'},
+];
+
+/* =========================================================
+   STATE
+   ========================================================= */
+const state={
+  category:null, applianceType:null, brand:null, problem:null, service:null,
+  location:{ useCurrent:false, area:null, address:'' },
+  date:null, dateLabel:null, time:null,
+  contact:{ name:'', phone:'', stage:'form', otp:['','','',''], attempts:0, error:false, verified:false, timer:30 },
+};
+let stepIndex=0;
+const STEP_META=[
+ {key:'category',label:'Category'},
+ {key:'type',label:'Appliance'},
+ {key:'brand',label:'Brand'},
+ {key:'problem',label:'Problem'},
+ {key:'service',label:'Service'},
+ {key:'location',label:'Location'},
+ {key:'datetime',label:'Schedule'},
+ {key:'contact',label:'Contact'},
+ {key:'summary',label:'Review'},
+];
+const TOTAL_STEPS=STEP_META.length; // 9 interactive steps; success screen shown after
+let resendTimerHandle=null;
+
+function applianceName(id){ const a=APPLIANCES.find(x=>x.id===id); return a?a.name:''; }
+function applianceIcon(id){ const a=APPLIANCES.find(x=>x.id===id); return a?a.icon:'category-generic'; }
+function categoryName(id){ const c=CATEGORIES.find(x=>x.id===id); return c?c.name:''; }
+function problemObj(id){ return PROBLEMS.find(x=>x.id===id); }
+function serviceObj(id){ return SERVICES.find(x=>x.id===id); }
+
+/* =========================================================
+   RENDER: progress
+   ========================================================= */
+function renderProgress(){
+  const pct=Math.round(((stepIndex+1)/TOTAL_STEPS)*100);
+  document.getElementById('progressLabel').textContent=`Step ${stepIndex+1} of ${TOTAL_STEPS}`;
+  document.getElementById('progressPct').textContent=pct+'%';
+  document.getElementById('progressFill').style.width=pct+'%';
+  const nodesWrap=document.getElementById('stepNodes');
+  nodesWrap.style.setProperty('--fill', `${(stepIndex/(TOTAL_STEPS-1))*100}%`);
+  nodesWrap.innerHTML=STEP_META.map((s,i)=>{
+    const st = i<stepIndex?'done':(i===stepIndex?'active':'');
+    return `<div class="step-node ${st}"><div class="node-dot">${i<stepIndex?checkIcon():(i+1)}</div><div class="node-label">${s.label}</div></div>`;
+  }).join('');
+}
+
+/* =========================================================
+   RENDER: desktop summary sidebar
+   ========================================================= */
+function estimateRange(){
+  if(!state.service) return '₹—';
+  const s=serviceObj(state.service);
+  return s? s.price.split('–')[0].split('/')[0] : '₹—';
+}
+function renderSummarySidebar(){
+  const rows=[
+    {icon:'category-generic', label:'Appliance', val: state.applianceType? applianceName(state.applianceType) : null, ic: state.applianceType?applianceIcon(state.applianceType):'category-generic'},
+    {icon:'star', label:'Brand', val: state.brand, ic:'star'},
+    {icon:'problem-other', label:'Problem', val: state.problem? problemObj(state.problem).name:null, ic: state.problem?problemObj(state.problem).icon:'problem-other'},
+    {icon:'service-repair', label:'Service', val: state.service? serviceObj(state.service).name:null, ic: state.service?serviceObj(state.service).icon:'service-repair'},
+    {icon:'pin', label:'Location', val: state.location.area || (state.location.useCurrent?'Current location':null), ic:'pin'},
+    {icon:'calendar', label:'Schedule', val: state.time==='emergency'? 'Emergency · ASAP' : ((state.dateLabel&&state.time)? `${state.dateLabel} · ${TIME_SLOTS.find(t=>t.id===state.time)?.name||''}`:null), ic:'calendar'},
+    {icon:'phone', label:'Contact', val: state.contact.verified? state.contact.name : null, ic:'phone'},
+  ];
+  document.getElementById('summaryList').innerHTML=rows.map(r=>`
+    <div class="summary-row ${r.val?'filled':''}">
+      <div class="sr-icon">${icon(r.ic)}</div>
+      <div class="sr-body">
+        <div class="sr-label">${r.label}</div>
+        <div class="sr-value">${r.val?r.val:'Not selected yet'}</div>
+      </div>
+    </div>`).join('');
+  document.getElementById('estValue').textContent=estimateRange();
+}
+
+/* =========================================================
+   RENDER: mobile mini sticky summary (in footer)
+   ========================================================= */
+function mobileMiniSummary(){
+  let icn='category-generic', label='Getting started', value="Let's find your appliance";
+  if(state.applianceType){ icn=applianceIcon(state.applianceType); label='Appliance'; value=applianceName(state.applianceType); }
+  if(state.problem){ icn=problemObj(state.problem).icon; label='Problem'; value=problemObj(state.problem).name; }
+  if(state.service){ icn=serviceObj(state.service).icon; label='Service'; value=serviceObj(state.service).name; }
+  if(state.location.area||state.location.useCurrent){ icn='pin'; label='Location'; value=state.location.area||'Current location'; }
+  if(state.time){ icn='calendar'; label='Scheduled'; value = state.time==='emergency' ? 'Emergency · ASAP' : (state.dateLabel? `${state.dateLabel} · ${TIME_SLOTS.find(t=>t.id===state.time)?.name||''}` : ''); }
+  return `<div class="mms-icon">${icon(icn)}</div><div class="mms-text"><div class="mms-label">${label}</div><div class="mms-value">${value}</div></div>`;
+}
+
+/* =========================================================
+   VALIDATION per step
+   ========================================================= */
+function canProceed(){
+  switch(stepIndex){
+    case 0: return !!state.category;
+    case 1: return !!state.applianceType;
+    case 2: return true; // brand optional/skippable
+    case 3: return !!state.problem;
+    case 4: return !!state.service;
+    case 5: return !!(state.location.area || state.location.useCurrent) ;
+    case 6: return !!(state.time && (state.date || state.time==='emergency'));
+    case 7: return !!state.contact.verified;
+    case 8: return true;
+    default: return true;
+  }
+}
+
+/* =========================================================
+   STEP RENDERERS
+   ========================================================= */
+function head(eyebrow,title,sub){
+  return `<div class="step-head"><p class="step-eyebrow">${eyebrow}</p><h1 class="step-title">${title}</h1><p class="step-sub">${sub}</p></div>`;
+}
+
+function renderStepCategory(){
+  return `${head('Step 1 of 9','What needs fixing today?','Pick a category to get started — takes under a minute.')}
+  <div class="option-grid" role="radiogroup" aria-label="Appliance category">
+    ${CATEGORIES.map(c=>`
+      <div class="option-card ${state.category===c.id?'selected':''}" role="radio" aria-checked="${state.category===c.id}" tabindex="0" data-action="select-category" data-value="${c.id}">
+        <div class="check-badge">${checkIcon()}</div>
+        <div class="option-icon-wrap">${icon(c.icon)}</div>
+        <div class="option-name">${c.name}</div>
+        <div class="option-desc">${c.desc}</div>
+      </div>`).join('')}
+  </div>`;
+}
+
+function renderStepType(){
+  const cat=state.category;
+  const list=APPLIANCES.filter(a=>a.cat===cat);
+  return `${head('Step 2 of 9',`Select your ${categoryName(cat).toLowerCase()} appliance`,'Choose the exact type so we send the right technician & tools.')}
+  <div class="option-grid" role="radiogroup" aria-label="Appliance type">
+    ${list.map(a=>`
+      <div class="option-card ${state.applianceType===a.id?'selected':''}" role="radio" aria-checked="${state.applianceType===a.id}" tabindex="0" data-action="select-type" data-value="${a.id}">
+        <div class="check-badge">${checkIcon()}</div>
+        <div class="option-icon-wrap">${icon(a.icon)}</div>
+        <div class="option-name">${a.name}</div>
+      </div>`).join('')}
+  </div>`;
+}
+
+function renderStepBrand(){
+  return `${head('Step 3 of 9','Which brand is it?','Optional, but helps us match the right parts & manuals.')}
+  <div class="option-grid cols-brand" role="radiogroup" aria-label="Brand">
+    ${BRANDS.map(b=>`
+      <div class="option-card compact ${state.brand===b?'selected':''}" role="radio" aria-checked="${state.brand===b}" tabindex="0" data-action="select-brand" data-value="${b}">
+        <div class="check-badge">${checkIcon()}</div>
+        <div class="brand-badge">${b.split(' ')[0].slice(0,2).toUpperCase()}</div>
+        <div class="option-name" style="text-align:left">${b}</div>
+      </div>`).join('')}
+  </div>`;
+}
+
+function renderStepProblem(){
+  return `${head('Step 4 of 9',"What's the problem?","Pick the issue that best matches what you're seeing or hearing.")}
+  <div class="option-grid cols-3" role="radiogroup" aria-label="Problem">
+    ${PROBLEMS.map(p=>`
+      <div class="option-card ${state.problem===p.id?'selected':''}" role="radio" aria-checked="${state.problem===p.id}" tabindex="0" data-action="select-problem" data-value="${p.id}">
+        <div class="check-badge">${checkIcon()}</div>
+        <div class="option-icon-wrap">${icon(p.icon)}</div>
+        <div class="option-name">${p.name}</div>
+      </div>`).join('')}
+  </div>`;
+}
+
+function renderStepService(){
+  const rec=state.problem? RECOMMENDED_SERVICE[state.problem] : null;
+  return `${head('Step 5 of 9','Choose your service',"Based on what you told us, here's what we'd recommend.")}
+  <div class="option-grid cols-wide" role="radiogroup" aria-label="Service">
+    ${SERVICES.map(s=>`
+      <div class="row-card ${state.service===s.id?'selected':''}" role="radio" aria-checked="${state.service===s.id}" tabindex="0" data-action="select-service" data-value="${s.id}">
+        <div class="row-icon">${icon(s.icon)}</div>
+        <div class="row-body">
+          <div class="row-title">${s.name} ${rec===s.id?'<span class="badge-rec">Recommended</span>':''}</div>
+          <div class="row-sub">${s.desc}</div>
+        </div>
+        <div class="row-price">${s.price}</div>
+        <div class="row-check">${checkIcon()}</div>
+      </div>`).join('')}
+  </div>`;
+}
+
+function renderStepLocation(){
+  return `${head('Step 6 of 9','Where should we come?','We cover 20+ localities across Bengaluru.')}
+  <div class="card-panel">
+    <button class="location-btn ${state.location.useCurrent?'active':''}" data-action="use-current-location" type="button">
+      ${icon('pin')}
+      ${state.location.useCurrent? 'Using your current location — 100 Feet Rd, Indiranagar' : 'Use my current location'}
+    </button>
+    <div class="field-group">
+      <label class="field-label">Or pick your area</label>
+      <div class="chip-row" role="radiogroup" aria-label="Area">
+        ${AREAS.map(a=>`<button type="button" class="chip ${state.location.area===a?'selected':''}" data-action="select-area" data-value="${a}">${a}</button>`).join('')}
+      </div>
+    </div>
+    <div class="field-group" style="margin-bottom:0">
+      <label class="field-label" for="addrInput">Flat / House no. & landmark <span style="color:var(--text-faint);font-weight:400">(optional)</span></label>
+      <input id="addrInput" class="text-input" type="text" placeholder="e.g. B-204, near Forum Mall" value="${state.location.address}" data-action="type-address" maxlength="80">
+    </div>
+  </div>`;
+}
+
+function nextDates(n){
+  const out=[]; const today=new Date();
+  for(let i=0;i<n;i++){
+    const d=new Date(today); d.setDate(today.getDate()+i);
+    out.push({
+      key:d.toISOString().slice(0,10),
+      day: i===0?'Today':i===1?'Tmrw':d.toLocaleDateString('en-US',{weekday:'short'}),
+      num: d.getDate(),
+      mon: d.toLocaleDateString('en-US',{month:'short'}),
+      label: i===0?'Today': i===1?'Tomorrow': d.toLocaleDateString('en-US',{weekday:'short', day:'numeric', month:'short'})
+    });
+  }
+  return out;
+}
+
+function renderStepDatetime(){
+  const dates=nextDates(9);
+  return `${head('Step 7 of 9','Pick a date & time','Same-day slots available in most areas.')}
+  <div class="card-panel">
+    <div class="emergency-card ${state.time==='emergency'?'selected':''}" data-action="select-emergency" tabindex="0">
+      <div class="emergency-icon">${icon('bolt')}</div>
+      <div style="flex:1">
+        <div class="emergency-title">Emergency — ASAP within 60 minutes</div>
+        <div class="emergency-sub">24/7 priority dispatch, small surcharge applies</div>
+      </div>
+      <div class="emergency-check">${checkIcon()}</div>
+    </div>
+
+    <label class="field-label">Choose a date</label>
+    <div class="date-strip" role="radiogroup" aria-label="Date">
+      ${dates.map(d=>`
+        <div class="date-chip ${state.date===d.key?'selected':''}" role="radio" aria-checked="${state.date===d.key}" tabindex="0" data-action="select-date" data-value="${d.key}" data-label="${d.label}">
+          <div class="dc-day">${d.day}</div>
+          <div class="dc-num">${d.num}</div>
+          <div class="dc-mon">${d.mon}</div>
+        </div>`).join('')}
+    </div>
+
+    <label class="field-label" style="margin-top:14px;display:block">Choose a time slot</label>
+    <div class="option-grid cols-3" role="radiogroup" aria-label="Time slot">
+      ${TIME_SLOTS.map(t=>`
+        <div class="option-card ${state.time===t.id?'selected':''}" role="radio" aria-checked="${state.time===t.id}" tabindex="0" data-action="select-time" data-value="${t.id}">
+          <div class="check-badge">${checkIcon()}</div>
+          <div class="option-icon-wrap">${icon('clock')}</div>
+          <div class="option-name">${t.name}</div>
+          <div class="option-desc">${t.range}</div>
+          <div class="option-desc" style="color:var(--orange-dark);font-weight:600">${t.avail}</div>
+        </div>`).join('')}
+    </div>
+  </div>`;
+}
+
+function renderStepContact(){
+  const c=state.contact;
+  let otpSection='';
+  if(c.stage==='otp'||c.stage==='verified'){
+    otpSection=`
+    <div class="field-group" style="margin-top:4px">
+      <label class="field-label">Enter the 4-digit OTP sent to +91 ${c.phone}</label>
+      <div class="otp-row">
+        ${[0,1,2,3].map(i=>`<input class="otp-box ${c.error?'error':''} ${c.verified?'success':''}" id="otp${i}" data-otp-index="${i}" maxlength="1" inputmode="numeric" pattern="[0-9]*" value="${c.otp[i]}" ${c.verified?'disabled':''} autocomplete="one-time-code">`).join('')}
+      </div>
+      ${c.error? `<div class="otp-error-msg">${icon('problem-other')} Incorrect OTP. Please check and try again.</div>` : ''}
+      ${c.verified? `<div class="otp-success-msg">${icon('service-amc')} Number verified successfully.</div>` : ''}
+      ${!c.verified? `
+      <div class="otp-meta">
+        <button class="resend-link" data-action="resend-otp" ${c.timer>0?'disabled':''}>${c.timer>0? `Resend OTP in 0:${c.timer<10?'0':''}${c.timer}` : 'Resend OTP'}</button>
+        <button class="resend-link" data-action="verify-otp" style="color:var(--orange)">Verify OTP</button>
+      </div>
+      <div class="demo-hint">Prototype tip: enter <strong>1234</strong> to verify. Any other 4 digits demonstrates the failed-OTP error state.</div>
+      `:''}
+    </div>`;
+  }
+  return `${head('Step 8 of 9','Confirm your contact details','So our technician can reach you before arrival.')}
+  <div class="card-panel">
+    <div class="field-group">
+      <label class="field-label" for="nameInput">Full name</label>
+      <input id="nameInput" class="text-input" type="text" placeholder="e.g. Priya Menon" value="${c.name}" data-action="type-name" ${c.stage!=='form'?'disabled':''}>
+    </div>
+    <div class="field-group">
+      <label class="field-label" for="phoneInput">Mobile number</label>
+      <div class="phone-input-row">
+        <span class="phone-prefix">+91</span>
+        <input id="phoneInput" class="text-input" type="tel" placeholder="10-digit mobile number" value="${c.phone}" maxlength="10" data-action="type-phone" ${c.stage!=='form'?'disabled':''}>
+      </div>
+      ${c.stage==='form'? "<div class=\"field-hint\">We'll text a 4-digit code to verify this number.</div>":''}
+    </div>
+    ${c.stage==='form'? `<button class="btn btn-primary" style="width:100%;justify-content:center" data-action="send-otp">Send OTP</button>` : otpSection}
+  </div>`;
+}
+
+function summaryBlock(icn,label,value,editStep){
+  return `<div class="sum-block">
+    <div class="row-icon">${icon(icn)}</div>
+    <div class="row-body"><div class="sr-label2">${label}</div><div class="sr-value2">${value}</div></div>
+    <button class="sum-edit" data-action="jump" data-value="${editStep}">${icon('edit')} Edit</button>
+  </div>`;
+}
+
+function renderStepSummary(){
+  const loc = state.location.area || (state.location.useCurrent?'Current location — 100 Feet Rd, Indiranagar':'—');
+  const sched = (state.time==='emergency') ? 'Emergency — within 60 minutes' : `${state.dateLabel||'—'} · ${TIME_SLOTS.find(t=>t.id===state.time)?.range||''}`;
+  return `${head('Step 9 of 9','Review your booking','Everything look right? Confirm to lock in your slot.')}
+  <div class="summary-screen-grid">
+    ${summaryBlock(applianceIcon(state.applianceType)||'category-generic','Appliance', `${applianceName(state.applianceType)}${state.brand?' · '+state.brand:''}`, 1)}
+    ${summaryBlock(problemObj(state.problem)?.icon||'problem-other','Problem', problemObj(state.problem)?.name||'—', 3)}
+    ${summaryBlock(serviceObj(state.service)?.icon||'service-repair','Service', serviceObj(state.service)?.name||'—', 4)}
+    ${summaryBlock('pin','Location', loc + (state.location.address? ' · '+state.location.address:''), 5)}
+    ${summaryBlock('calendar','Schedule', sched, 6)}
+    ${summaryBlock('phone','Contact', `${state.contact.name} · +91 ${state.contact.phone}`, 7)}
+  </div>
+  <div class="price-card">
+    <div class="price-top"><span class="price-label">Estimated visit charge</span><span class="price-value">${estimateRange()}</span></div>
+    <div class="price-note">Final price is confirmed on-site after a free diagnosis — no hidden charges.</div>
+    <div class="trust-row-final">
+      <span class="trust-pill">${icon('shield',)} Certified technicians</span>
+      <span class="trust-pill">${icon('service-amc')} Genuine parts</span>
+      <span class="trust-pill">${icon('clock')} Same-day service</span>
+    </div>
+  </div>`;
+}
+
+function genBookingId(){
+  return 'SF-' + Math.random().toString(36).slice(2,5).toUpperCase() + '-' + Math.floor(1000+Math.random()*9000);
+}
+let bookingId='';
+function renderSuccess(){
+  if(!bookingId) bookingId=genBookingId();
+  document.getElementById('stepContent').innerHTML=`
+  <div class="success-wrap fade-in">
+    <div class="success-check"><svg class="icon" viewBox="0 0 48 48" style="stroke:var(--success)"><path d="M24 6l14 6v10c0 10-6 17-14 20-8-3-14-10-14-20V12z"/><path d="M18 24l4 4 8-8"/></svg></div>
+    <h1 class="success-title">Booking confirmed!</h1>
+    <p class="success-sub">Thanks ${state.contact.name.split(' ')[0]||''}, we've got your ${applianceName(state.applianceType).toLowerCase()} repair scheduled.</p>
+    <div class="booking-id-card"><span class="booking-id-label">Booking ID</span><span class="booking-id-value">${bookingId}</span></div>
+
+    <div class="eta-card">
+      <div class="row-icon">${icon('truck')}</div>
+      <div class="row-body">
+        <div class="row-title">Technician will be assigned shortly</div>
+        <div class="row-sub">${state.time==='emergency'?'Arriving within 60 minutes':`${state.dateLabel} · ${TIME_SLOTS.find(t=>t.id===state.time)?.range||''}`} · ${state.location.area||'Your location'}</div>
+      </div>
+    </div>
+
+    <div class="next-steps">
+      <h4>What happens next</h4>
+      <div class="ns-item">${icon('service-amc')} We'll send technician details on WhatsApp & SMS</div>
+      <div class="ns-item">${icon('service-amc')} Free diagnosis first — you approve the quote before any repair</div>
+      <div class="ns-item">${icon('service-amc')} Every repair is backed by a service warranty</div>
+    </div>
+
+    <div class="success-actions">
+      <button class="btn btn-secondary" data-action="restart">Book another repair</button>
+      <button class="btn btn-primary" data-action="noop">Track this booking</button>
+    </div>
+  </div>`;
+  document.querySelector('.progress-wrap').style.display='none';
+  document.querySelector('.summary-side').style.display='none';
+  document.getElementById('flowFooter').innerHTML='';
+}
+
+/* =========================================================
+   FOOTER (Back / Skip / Next)
+   ========================================================= */
+function renderFooter(){
+  const isFirst=stepIndex===0;
+  const isBrand=stepIndex===2;
+  const isSummary=stepIndex===8;
+  const nextLabel = isSummary? 'Confirm Booking' : 'Next';
+  document.getElementById('flowFooter').innerHTML=`
+    <div class="flow-footer-inner">
+      ${!isFirst? `<button class="btn btn-secondary" data-action="back" aria-label="Go back"><svg class="icon" viewBox="0 0 24 24"><path d="M15 6l-9 6 9 6"/></svg><span class="footer-back-text">Back</span></button>`:''}
+      <div class="mobile-mini-summary">${mobileMiniSummary()}</div>
+      ${isBrand? `<button class="btn btn-text" data-action="skip">Skip</button>`:''}
+      <button class="btn btn-primary" data-action="next" ${canProceed()?'':'disabled'}>${nextLabel}<svg class="icon" viewBox="0 0 24 24"><path d="M9 6l9 6-9 6"/></svg></button>
+    </div>`;
+}
+
+/* =========================================================
+   MASTER RENDER
+   ========================================================= */
+const RENDERERS=[renderStepCategory,renderStepType,renderStepBrand,renderStepProblem,renderStepService,renderStepLocation,renderStepDatetime,renderStepContact,renderStepSummary];
+
+function render(){
+  document.querySelector('.progress-wrap').style.display='';
+  document.querySelector('.summary-side').style.display='';
+  const content=document.getElementById('stepContent');
+  content.classList.remove('fade-in'); void content.offsetWidth; content.classList.add('fade-in');
+  content.innerHTML=RENDERERS[stepIndex]();
+  renderProgress();
+  renderSummarySidebar();
+  renderFooter();
+  wireOtpBoxesIfPresent();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* =========================================================
+   EVENT DELEGATION
+   ========================================================= */
+document.addEventListener('click', function(e){
+  const t=e.target.closest('[data-action]');
+  if(!t) return;
+  const action=t.dataset.action, value=t.dataset.value;
+  handleAction(action, value, t);
+});
+document.addEventListener('keydown', function(e){
+  if((e.key==='Enter'||e.key===' ') && e.target.matches('[role="radio"][data-action]')){
+    e.preventDefault();
+    handleAction(e.target.dataset.action, e.target.dataset.value, e.target);
+  }
+});
+document.addEventListener('input', function(e){
+  if(e.target.dataset && e.target.dataset.action==='type-address'){ state.location.address=e.target.value; }
+  if(e.target.dataset && e.target.dataset.action==='type-name'){ state.contact.name=e.target.value; }
+  if(e.target.dataset && e.target.dataset.action==='type-phone'){ state.contact.phone=e.target.value.replace(/[^0-9]/g,'').slice(0,10); e.target.value=state.contact.phone; }
+});
+
+function handleAction(action,value,el){
+  switch(action){
+    case 'select-category':
+      state.category=value; state.applianceType=null; break;
+    case 'select-type':
+      state.applianceType=value; break;
+    case 'select-brand':
+      state.brand=(state.brand===value)?null:value; break;
+    case 'select-problem':
+      state.problem=value; state.service=null; break;
+    case 'select-service':
+      state.service=value; break;
+    case 'use-current-location':
+      state.location.useCurrent=!state.location.useCurrent;
+      if(state.location.useCurrent) state.location.area=null;
+      break;
+    case 'select-area':
+      state.location.area=(state.location.area===value)?null:value;
+      if(state.location.area) state.location.useCurrent=false;
+      break;
+    case 'select-emergency':
+      if(state.time==='emergency'){ state.time=null; } else { state.time='emergency'; state.date=null; state.dateLabel='Any day'; }
+      break;
+    case 'select-date':
+      state.date=value; state.dateLabel=el.dataset.label; if(state.time==='emergency') state.time=null; break;
+    case 'select-time':
+      state.time=value; break;
+    case 'send-otp':
+      if(!validateContactForm()) return;
+      state.contact.stage='otp'; state.contact.otp=['','','',''];
+      startResendTimer();
+      break;
+    case 'resend-otp':
+      state.contact.otp=['','','',''];state.contact.error=false; startResendTimer();
+      render(); focusFirstOtp(); return;
+    case 'verify-otp':
+      verifyOtp(); return;
+    case 'back':
+      if(stepIndex>0){ stepIndex--; render(); } return;
+    case 'skip':
+      if(stepIndex<8){ stepIndex++; render(); } return;
+    case 'jump':
+      stepIndex=parseInt(value,10); render(); return;
+    case 'next':
+      if(!canProceed()) return;
+      if(stepIndex===8){ renderSuccess(); return; }
+      stepIndex++; render(); return;
+    case 'restart':
+      Object.assign(state,{category:null,applianceType:null,brand:null,problem:null,service:null,
+        location:{useCurrent:false,area:null,address:''},date:null,dateLabel:null,time:null,
+        contact:{name:'',phone:'',stage:'form',otp:['','','',''],attempts:0,error:false,verified:false,timer:30}});
+      bookingId=''; stepIndex=0; render(); return;
+    default: return;
+  }
+  render();
+}
+
+function validateContactForm(){
+  const nameOk=state.contact.name.trim().length>1;
+  const phoneOk=state.contact.phone.length===10;
+  if(!nameOk){ document.getElementById('nameInput')?.focus(); return false; }
+  if(!phoneOk){ document.getElementById('phoneInput')?.focus(); return false; }
+  return true;
+}
+
+function startResendTimer(){
+  clearInterval(resendTimerHandle);
+  state.contact.timer=30;
+  resendTimerHandle=setInterval(()=>{
+    state.contact.timer--;
+    const btn=document.querySelector('[data-action="resend-otp"]');
+    if(btn){ btn.textContent = state.contact.timer>0? `Resend OTP in 0:${state.contact.timer<10?'0':''}${state.contact.timer}` : 'Resend OTP'; btn.disabled = state.contact.timer>0; }
+    if(state.contact.timer<=0) clearInterval(resendTimerHandle);
+  },1000);
+}
+
+function wireOtpBoxesIfPresent(){
+  const boxes=document.querySelectorAll('.otp-box');
+  if(!boxes.length) return;
+  boxes.forEach((box,i)=>{
+    box.addEventListener('input',()=>{
+      const v=box.value.replace(/[^0-9]/g,'').slice(0,1);
+      box.value=v; state.contact.otp[i]=v; state.contact.error=false;
+      box.classList.remove('error');
+      if(v && boxes[i+1]) boxes[i+1].focus();
+    });
+    box.addEventListener('keydown',(e)=>{
+      if(e.key==='Backspace' && !box.value && boxes[i-1]) boxes[i-1].focus();
+      if(e.key==='Enter') verifyOtp();
+    });
+  });
+  focusFirstOtp();
+}
+function focusFirstOtp(){
+  const first=document.getElementById('otp0');
+  if(first) first.focus();
+}
+
+function verifyOtp(){
+  const code=state.contact.otp.join('');
+  if(code.length<4) return;
+  if(code==='1234'){
+    state.contact.verified=true; state.contact.error=false; state.contact.stage='verified';
+    clearInterval(resendTimerHandle);
+    render();
+  } else {
+    state.contact.error=true; state.contact.attempts++;
+    render();
+    setTimeout(()=>{ state.contact.otp=['','','','']; document.querySelectorAll('.otp-box').forEach(b=>b.value=''); focusFirstOtp(); },650);
+  }
+}
+
+/* init */
+render();
+</script>
+</body>
+</html>

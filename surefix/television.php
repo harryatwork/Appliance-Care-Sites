@@ -5,12 +5,17 @@ $pageDescription = 'Television repair in Bengaluru — LED, Smart TV & OLED. Pan
 $applianceName = 'Television';
 $applianceIconClass = 'fa-tv';
 $heroTagline = 'LED, Smart TV or OLED — panel, sound and software issues diagnosed and fixed by certified technicians.';
+$bannerImage = 'television.jpg';
 
 $typeOptions = ['LED', 'Smart TV', 'OLED', 'LCD'];
 
-$problemOptions = [
-    'No Display / Black Screen', 'No Sound', 'Lines on Screen', 'Not Turning On',
-    'Remote Not Working', 'Smart Features Not Working', 'Other',
+$problemGroups = [
+    'Repair' => [
+        'Display Issue', 'Power Issue', 'Sound Issue', 'Remote Issue', 'Unknown Issue',
+    ],
+    'Service' => [
+        'Installation', 'Uninstallation', 'Both Installation & Uninstallation',
+    ],
 ];
 
 $commonIssues = [

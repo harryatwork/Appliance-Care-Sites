@@ -8,18 +8,25 @@
 // Site constants
 // ---------------------------------------------------------------------------
 
-// Base URL used for all asset/nav links so pages work regardless of nesting
-// depth (e.g. a future /blog/post-slug.php still resolves assets correctly).
-// Local XAMPP dev path shown below — update when deploying to production
-// (e.g. 'https://surefix.in', no trailing slash).
-define('SITE_URL', '/shahid_sites/surefix');
+// Base URL used for all asset/nav links, derived from this file's fixed
+// location relative to the web server's document root — works unchanged on
+// XAMPP (/shahid_sites/surefix), on the live host (/surefix), at a domain
+// root with no subfolder, and for any future page nested in a subfolder
+// (e.g. admin/) since it's anchored to config.php, not to the calling page.
+$siteRoot = str_replace('\\', '/', dirname(__DIR__));
+$docRoot = isset($_SERVER['DOCUMENT_ROOT']) ? str_replace('\\', '/', rtrim($_SERVER['DOCUMENT_ROOT'], '/')) : '';
+define('SITE_URL', ($docRoot && strpos($siteRoot, $docRoot) === 0) ? substr($siteRoot, strlen($docRoot)) : '');
 
 define('SITE_NAME', 'Sure Fix');
-define('SITE_PHONE', '+91 1800-456-789');
-define('SITE_PHONE_LINK', '+911800456789'); // digits-only, for tel: links
-define('SITE_EMAIL', 'contact@surefix.in');
+define('SITE_PHONE', '+91 855-0000-423'); // same number used for WhatsApp & Call
+define('SITE_PHONE_LINK', '+918550000423'); // digits-only, for tel:/wa.me links
+define('SITE_EMAIL', 'care@sure-fix.in');
 define('SITE_ADDRESS', '221, 100 Feet Road, Indiranagar, Bengaluru, Karnataka 560038');
 define('SITE_CITY', 'Bengaluru');
+
+define('SITE_INSTAGRAM_URL', 'https://www.instagram.com/mysurefix');
+define('SITE_FACEBOOK_URL', 'https://www.facebook.com/share/19JW7azFwm/');
+define('SITE_X_URL', 'https://x.com/mysurefix');
 
 // Used by the Step 2 location picker in the booking flow (Google Maps JS API
 // + Geocoding). Restrict this key to your production domain's HTTP referrers

@@ -1,8 +1,8 @@
 <?php
 // Shared admin HTML header + sidebar.
-// Expects: $PAGE_TITLE (string), $ACTIVE_NAV ('leads'|'services'|'testimonials')
+// Expects: $PAGE_TITLE (string), $ACTIVE_NAV ('leads'|'blogs'|'profile')
 try {
-    $unread = db()->query("SELECT COUNT(*) FROM leads WHERE status='new'")->fetchColumn();
+    $unread = db()->query("SELECT COUNT(*) FROM leads WHERE status='New'")->fetchColumn();
 } catch (Exception $e) { $unread = 0; }
 ?>
 <!DOCTYPE html>
@@ -10,17 +10,19 @@ try {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title><?= htmlspecialchars($PAGE_TITLE ?? 'Admin') ?> — We Assist Admin</title>
+    <title><?= htmlspecialchars($PAGE_TITLE ?? 'Admin') ?> — Sure Fix Admin</title>
     <link rel="stylesheet" href="admin.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
 <div class="admin-wrap">
 
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
   <!-- Sidebar -->
-  <aside class="sidebar">
+  <aside class="sidebar" id="sidebar">
     <a href="leads.php" class="sidebar__logo">
-      <img src="../assets/images/logo.png" alt="We Assist" class="sidebar__logo-img">
+      <img src="../assets/images/logo.png" alt="Sure Fix" class="sidebar__logo-img">
       <small>Admin Panel</small>
     </a>
     <nav class="sidebar__nav">
@@ -30,14 +32,14 @@ try {
           <span class="badge"><?= (int)$unread ?></span>
         <?php endif; ?>
       </a>
-      <a href="services.php" class="<?= ($ACTIVE_NAV ?? '') === 'services' ? 'active' : '' ?>">
-        <i class="fa-solid fa-wrench"></i> Services
-      </a>
-      <a href="testimonials.php" class="<?= ($ACTIVE_NAV ?? '') === 'testimonials' ? 'active' : '' ?>">
-        <i class="fa-solid fa-star"></i> Testimonials
-      </a>
       <a href="blogs.php" class="<?= ($ACTIVE_NAV ?? '') === 'blogs' ? 'active' : '' ?>">
         <i class="fa-solid fa-blog"></i> Blog Posts
+      </a>
+      <a href="blog-categories.php" class="<?= ($ACTIVE_NAV ?? '') === 'blog-categories' ? 'active' : '' ?>">
+        <i class="fa-solid fa-tags"></i> Blog Categories
+      </a>
+      <a href="profile.php" class="<?= ($ACTIVE_NAV ?? '') === 'profile' ? 'active' : '' ?>">
+        <i class="fa-solid fa-user-gear"></i> Profile
       </a>
     </nav>
     <div class="sidebar__bottom">
@@ -53,7 +55,10 @@ try {
   <!-- Main -->
   <main class="admin-main">
     <div class="admin-topbar">
-      <h1 class="admin-topbar__title"><?= htmlspecialchars($PAGE_TITLE ?? 'Admin') ?></h1>
+      <div style="display:flex;align-items:center;gap:10px">
+        <button type="button" class="admin-topbar__menu-btn" id="sidebarToggle" aria-label="Menu"><i class="fa-solid fa-bars"></i></button>
+        <h1 class="admin-topbar__title"><?= htmlspecialchars($PAGE_TITLE ?? 'Admin') ?></h1>
+      </div>
       <div class="admin-topbar__user">
         <i class="fa-solid fa-circle-user"></i>
         <?= htmlspecialchars($_SESSION['admin_user'] ?? 'Admin') ?>

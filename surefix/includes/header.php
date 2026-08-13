@@ -35,6 +35,7 @@ if (!isset($pageDescription)) {
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
 <link rel="stylesheet" href="<?php echo SITE_URL; ?>/assets/css/style.css">
+<script>window.SUREFIX_SITE_URL = <?php echo json_encode(SITE_URL); ?>;</script>
 </head>
 <body>
 
@@ -48,14 +49,13 @@ if (!isset($pageDescription)) {
 <div class="topbar">
   <div class="container">
     <div class="topbar__left">
-      <a href="tel:<?php echo SITE_PHONE_LINK; ?>" class="topbar__item"><i class="fa-solid fa-phone"></i> <?php echo SITE_PHONE; ?></a>
       <span class="topbar__item"><i class="fa-regular fa-clock"></i> Mon–Sun: 8 AM – 10 PM</span>
       <span class="topbar__item"><i class="fa-solid fa-location-dot"></i> Bengaluru, Karnataka</span>
     </div>
     <div class="topbar__right">
-      <a href="#" class="topbar__social" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
-      <a href="#" class="topbar__social" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
-      <a href="#" class="topbar__social" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+      <a href="<?php echo SITE_FACEBOOK_URL; ?>" target="_blank" rel="noopener" class="topbar__social" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+      <a href="<?php echo SITE_INSTAGRAM_URL; ?>" target="_blank" rel="noopener" class="topbar__social" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+      <a href="<?php echo SITE_X_URL; ?>" target="_blank" rel="noopener" class="topbar__social" aria-label="X (Twitter)"><i class="fa-brands fa-x-twitter"></i></a>
     </div>
   </div>
 </div>
@@ -70,11 +70,8 @@ if (!isset($pageDescription)) {
       </a>
       <ul class="nav-menu">
         <li><a href="<?php echo SITE_URL; ?>/index.php">Home</a></li>
-        <li><a href="<?php echo SITE_URL; ?>/index.php#why">Why Us</a></li>
         <li><a href="<?php echo SITE_URL; ?>/index.php#services">Services</a></li>
         <li><a href="<?php echo SITE_URL; ?>/index.php#brands">Brands</a></li>
-        <li><a href="<?php echo SITE_URL; ?>/index.php#process">Process</a></li>
-        <li><a href="<?php echo SITE_URL; ?>/index.php#reviews">Reviews</a></li>
         <li><a href="<?php echo SITE_URL; ?>/index.php#faq">FAQ</a></li>
         <li><a href="<?php echo SITE_URL; ?>/blog.php">Blog</a></li>
         <li><a href="<?php echo SITE_URL; ?>/contact.php">Contact</a></li>
@@ -93,11 +90,8 @@ if (!isset($pageDescription)) {
   <button class="drawer__close btn" id="drawerClose" style="width:40px;height:40px;padding:0;border-radius:50%;background:var(--glass-bg-strong);border:1px solid var(--glass-border);justify-content:center;" aria-label="Close menu"><i class="fa-solid fa-xmark"></i></button>
   <ul>
     <li><a href="<?php echo SITE_URL; ?>/index.php" class="drawer-link">Home</a></li>
-    <li><a href="<?php echo SITE_URL; ?>/index.php#why" class="drawer-link">Why Us</a></li>
     <li><a href="<?php echo SITE_URL; ?>/index.php#services" class="drawer-link">Services</a></li>
     <li><a href="<?php echo SITE_URL; ?>/index.php#brands" class="drawer-link">Brands</a></li>
-    <li><a href="<?php echo SITE_URL; ?>/index.php#process" class="drawer-link">Process</a></li>
-    <li><a href="<?php echo SITE_URL; ?>/index.php#reviews" class="drawer-link">Reviews</a></li>
     <li><a href="<?php echo SITE_URL; ?>/index.php#faq" class="drawer-link">FAQ</a></li>
     <li><a href="<?php echo SITE_URL; ?>/blog.php" class="drawer-link">Blog</a></li>
     <li><a href="<?php echo SITE_URL; ?>/contact.php" class="drawer-link">Contact</a></li>

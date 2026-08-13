@@ -5,12 +5,13 @@ $pageDescription = 'Microwave and oven repair in Bengaluru — solo, grill & con
 $applianceName = 'Microwave Oven';
 $applianceIconClass = 'fa-fire-burner';
 $heroTagline = 'Solo, grill or convection — heating faults, sparking and turntable issues fixed fast by certified technicians.';
+$bannerImage = 'microwave-oven.jpg';
 
 $typeOptions = ['Solo', 'Grill', 'Convection'];
 
 $problemOptions = [
-    'Not Heating', 'Turntable Not Rotating', 'Sparking Inside', 'Display / Buttons Not Working',
-    'Door Not Closing Properly', 'Unusual Noise', 'Other',
+    'Not Heating', 'Not Working', 'Sparking', 'Button/Touch Issue',
+    'Noise', 'Other/Diagnosis',
 ];
 
 $commonIssues = [

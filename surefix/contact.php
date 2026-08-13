@@ -23,26 +23,33 @@ require_once __DIR__ . '/includes/header.php';
 <section class="pad-sm">
   <div class="container">
     <div class="contact-grid">
-      <!-- Static for now — Phase 2 wires this to api/submit-lead.php -->
-      <form class="contact-form glass reveal" action="#" onsubmit="return false;">
-        <div class="form-row">
-          <label for="cf-name">Full Name</label>
-          <input type="text" id="cf-name" name="name" placeholder="Your name" required>
+      <div class="contact-form-wrap">
+        <form id="contactForm" class="contact-form glass reveal" novalidate>
+          <input type="text" name="website" class="form-honeypot" tabindex="-1" autocomplete="off" aria-hidden="true">
+          <div class="form-row">
+            <label for="cf-name">Full Name</label>
+            <input type="text" id="cf-name" name="name" placeholder="Your name" required>
+          </div>
+          <div class="form-row">
+            <label for="cf-mobile">Mobile Number</label>
+            <input type="tel" id="cf-mobile" name="mobile" placeholder="10-digit mobile number" maxlength="10" inputmode="numeric" required>
+          </div>
+          <div class="form-row">
+            <label for="cf-email">Email (optional)</label>
+            <input type="email" id="cf-email" name="email" placeholder="you@example.com">
+          </div>
+          <div class="form-row">
+            <label for="cf-message">Message</label>
+            <textarea id="cf-message" name="message" placeholder="Tell us what's wrong and we'll get back to you"></textarea>
+          </div>
+          <p class="contact-form__hint" id="cfHint" hidden></p>
+          <button type="submit" class="btn btn--primary"><i class="fa-solid fa-paper-plane"></i> Send Message</button>
+        </form>
+        <div class="contact-form__success glass reveal" id="cfSuccess" hidden>
+          <i class="fa-solid fa-circle-check"></i>
+          <p>Thanks! We've received your message and will get back to you shortly.</p>
         </div>
-        <div class="form-row">
-          <label for="cf-mobile">Mobile Number</label>
-          <input type="tel" id="cf-mobile" name="mobile" placeholder="+91 9XXXX XXXXX" required>
-        </div>
-        <div class="form-row">
-          <label for="cf-email">Email (optional)</label>
-          <input type="email" id="cf-email" name="email" placeholder="you@example.com">
-        </div>
-        <div class="form-row">
-          <label for="cf-message">Message</label>
-          <textarea id="cf-message" name="message" placeholder="Tell us what's wrong and we'll get back to you"></textarea>
-        </div>
-        <button type="submit" class="btn btn--primary"><i class="fa-solid fa-paper-plane"></i> Send Message</button>
-      </form>
+      </div>
 
       <div class="contact-info">
         <div class="contact-info__card glass reveal">

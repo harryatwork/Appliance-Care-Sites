@@ -7,10 +7,9 @@
           <a href="<?php echo SITE_URL; ?>/index.php" class="logo"><img src="<?php echo SITE_URL; ?>/assets/images/logo.png" alt="Sure Fix" class="logo__icon"><span class="logo__text">Sure Fix</span></a>
           <p>Premium home appliance repair, trusted by 50,000+ households across Bengaluru. Certified technicians, genuine parts, same-day service.</p>
           <div class="footer-social">
-            <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
-            <a href="#" aria-label="Twitter"><i class="fa-brands fa-twitter"></i></a>
-            <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
-            <a href="#" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+            <a href="<?php echo SITE_FACEBOOK_URL; ?>" target="_blank" rel="noopener" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+            <a href="<?php echo SITE_INSTAGRAM_URL; ?>" target="_blank" rel="noopener" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+            <a href="<?php echo SITE_X_URL; ?>" target="_blank" rel="noopener" aria-label="X (Twitter)"><i class="fa-brands fa-x-twitter"></i></a>
           </div>
         </div>
         <div>
@@ -21,6 +20,7 @@
             <li><a href="<?php echo SITE_URL; ?>/index.php#process">How It Works</a></li>
             <li><a href="<?php echo SITE_URL; ?>/index.php#reviews">Reviews</a></li>
             <li><a href="<?php echo SITE_URL; ?>/index.php#faq">FAQs</a></li>
+            <li><a href="<?php echo SITE_URL; ?>/blog.php">Blog</a></li>
           </ul>
         </div>
         <div>
@@ -32,6 +32,9 @@
             <li><a href="<?php echo SITE_URL; ?>/television.php">Television</a></li>
             <li><a href="<?php echo SITE_URL; ?>/microwave-oven.php">Microwave &amp; Oven</a></li>
             <li><a href="<?php echo SITE_URL; ?>/geyser.php">Geyser</a></li>
+            <li><a href="<?php echo SITE_URL; ?>/ro.php">RO Water Purifier</a></li>
+            <li><a href="<?php echo SITE_URL; ?>/dishwasher.php">Dishwasher</a></li>
+            <li><a href="<?php echo SITE_URL; ?>/dryer.php">Dryer</a></li>
           </ul>
         </div>
         <div>

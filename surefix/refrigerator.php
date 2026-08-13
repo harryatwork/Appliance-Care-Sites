@@ -5,12 +5,13 @@ $pageDescription = 'Expert refrigerator repair in Bengaluru — single door, dou
 $applianceName = 'Refrigerator';
 $applianceIconClass = 'fa-snowflake';
 $heroTagline = 'Single door, double door or side-by-side — genuine gas refilling, compressor and cooling repairs, done right the first time.';
+$bannerImage = 'refrigerator.jpg';
 
-$typeOptions = ['Single Door', 'Double Door', 'Side-by-Side', 'Mini / Bar Fridge'];
+$typeOptions = ['Single Door', 'Double Door', 'Side By Side', 'Deep Freezer', 'Multi Door', 'Not Sure'];
 
 $problemOptions = [
-    'Not Cooling', 'Excessive Frost / Ice Build-up', 'Water Leakage', 'Unusual Noise',
-    'Door Seal Damaged', 'Compressor Not Running', 'Display / Error Code', 'Other',
+    'Unknown Issue', 'Power Issue', 'Not Cooling', 'Excess Cooling',
+    'Water Leakage', 'Noise Issue', 'Door Issue',
 ];
 
 $commonIssues = [

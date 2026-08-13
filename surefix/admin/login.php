@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $error = 'Invalid username or password.';
             }
         } catch (Exception $e) {
-            $error = 'Database error. Please run <a href="setup.php">setup.php</a> first.';
+            $error = 'Database error. Please confirm MySQL is running and the schema is imported (sql/schema.sql).';
         }
     }
 }
@@ -43,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Admin Login — We Assist</title>
+    <title>Admin Login — Sure Fix</title>
     <link rel="stylesheet" href="admin.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
@@ -51,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <div class="login-wrap">
   <div class="login-box">
     <div class="login-box__logo">
-      <img src="../assets/images/logo.png" alt="We Assist" class="login-logo">
+      <img src="../assets/images/logo.png" alt="Sure Fix" class="login-logo">
       <p>Admin Panel &mdash; Sign in to continue</p>
     </div>
 

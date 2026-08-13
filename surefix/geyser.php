@@ -5,12 +5,13 @@ $pageDescription = 'Geyser and water heater repair in Bengaluru — electric, ga
 $applianceName = 'Geyser';
 $applianceIconClass = 'fa-droplet';
 $heroTagline = 'Electric, gas or instant geysers — installation, thermostat and heating element replacement from certified technicians.';
+$bannerImage = 'geyser.jpg';
 
 $typeOptions = ['Electric', 'Gas', 'Instant', 'Storage'];
 
 $problemOptions = [
-    'No Hot Water', 'Water Too Hot / Uncontrolled', 'Water Leakage', 'Strange Noise',
-    'Not Turning On', 'Tripping the Electrical Circuit', 'Other',
+    'Not Heating', 'Water Leakage', 'No Power', 'Water Quality Issue',
+    'Installation', 'Uninstallation', 'Other',
 ];
 
 $commonIssues = [

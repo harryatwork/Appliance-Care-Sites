@@ -4,39 +4,50 @@ require_once '_auth.php';
 $PAGE_TITLE = 'Leads';
 $ACTIVE_NAV = 'leads';
 
+$STATUSES = ['New', 'Assigned', 'In Progress', 'Completed', 'Cancelled'];
+
 // ── Handle status/delete actions ──────────────────────────────────────────────
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'], $_POST['id'])) {
     $id     = (int)$_POST['id'];
     $action = $_POST['action'];
     $back   = 'leads.php?' . http_build_query(array_filter([
-        'type'   => $_POST['type_filter']   ?? '',
-        'status' => $_POST['status_filter'] ?? '',
-        'page'   => $_POST['page_num']      ?? '',
-    ]));
+        'date'    => $_POST['date_filter']    ?? '',
+        'service' => $_POST['service_filter'] ?? '',
+        'status'  => $_POST['status_filter']  ?? '',
+        'search'  => $_POST['search_filter']  ?? '',
+        'page'    => $_POST['page_num']       ?? '',
+    ], fn($v) => $v !== ''));
+
     if ($action === 'delete') {
         db()->prepare('DELETE FROM leads WHERE id = ?')->execute([$id]);
-    } elseif (in_array($action, ['new', 'read', 'done'], true)) {
-        db()->prepare('UPDATE leads SET status = ? WHERE id = ?')->execute([$action, $id]);
+    } elseif ($action === 'set_status' && in_array($_POST['status'] ?? '', $STATUSES, true)) {
+        db()->prepare('UPDATE leads SET status = ? WHERE id = ?')->execute([$_POST['status'], $id]);
     }
     header('Location: ' . $back);
     exit;
 }
 
 // ── Filters & Pagination ──────────────────────────────────────────────────────
-$type   = $_GET['type']   ?? 'all';
-$status = $_GET['status'] ?? 'all';
-$page   = max(1, (int)($_GET['page'] ?? 1));
-$per    = 20;
-$offset = ($page - 1) * $per;
+$date    = $_GET['date']    ?? '';
+$service = $_GET['service'] ?? 'all';
+$status  = $_GET['status']  ?? 'all';
+$search  = trim($_GET['search'] ?? '');
+$page    = max(1, (int)($_GET['page'] ?? 1));
+$per     = 20;
+$offset  = ($page - 1) * $per;
 
 $conditions = [];
 $params     = [];
-if ($type   !== 'all') { $conditions[] = 'type = ?';   $params[] = $type; }
-if ($status !== 'all') { $conditions[] = 'status = ?'; $params[] = $status; }
+if ($date !== '')            { $conditions[] = 'DATE(created_at) = ?'; $params[] = $date; }
+if ($service !== 'all' && $service !== '') { $conditions[] = 'service = ?'; $params[] = $service; }
+if ($status !== 'all')       { $conditions[] = 'status = ?'; $params[] = $status; }
+if ($search !== '') {
+    $conditions[] = '(name LIKE ? OR mobile LIKE ? OR booking_id LIKE ?)';
+    $like = '%' . $search . '%';
+    array_push($params, $like, $like, $like);
+}
 $where = $conditions ? 'WHERE ' . implode(' AND ', $conditions) : '';
 
-$total = (int)db()->prepare("SELECT COUNT(*) FROM leads $where")->execute($params)
-             ?: db()->prepare("SELECT COUNT(*) FROM leads $where")->execute($params);
 $cntStmt = db()->prepare("SELECT COUNT(*) FROM leads $where");
 $cntStmt->execute($params);
 $total = (int)$cntStmt->fetchColumn();
@@ -45,23 +56,25 @@ $stmt = db()->prepare("SELECT * FROM leads $where ORDER BY created_at DESC LIMIT
 $stmt->execute($params);
 $leads = $stmt->fetchAll();
 
+$services = db()->query("SELECT DISTINCT service FROM leads WHERE service IS NOT NULL AND service <> '' ORDER BY service ASC")->fetchAll(PDO::FETCH_COLUMN);
+
 // ── Stats ─────────────────────────────────────────────────────────────────────
 $stats = db()->query(
     "SELECT COUNT(*) AS total,
-            SUM(type='contact') AS contacts,
-            SUM(type='booking') AS bookings,
-            SUM(status='new')   AS new_count
+            SUM(status='New') AS new_count,
+            SUM(status IN ('Assigned','In Progress')) AS active_count,
+            SUM(status='Completed') AS completed_count
      FROM leads"
 )->fetch();
 
 $totalPages = (int)ceil($total / $per);
 
-// ── Build URL helper ──────────────────────────────────────────────────────────
-function leadsUrl(array $params = []): string {
-    global $type, $status, $page;
-    $base = ['type' => $type, 'status' => $status, 'page' => $page];
-    return 'leads.php?' . http_build_query(array_merge($base, $params));
+function leadsUrl(array $override = []): string {
+    global $date, $service, $status, $search, $page;
+    $base = ['date' => $date, 'service' => $service, 'status' => $status, 'search' => $search, 'page' => $page];
+    return 'leads.php?' . http_build_query(array_filter(array_merge($base, $override), fn($v) => $v !== '' && $v !== 'all'));
 }
+function statusClass(string $s): string { return 'status-' . str_replace(' ', '-', $s); }
 
 include '_header.php';
 ?>
@@ -73,30 +86,56 @@ include '_header.php';
     <div class="stat-card__val"><?= (int)$stats['total'] ?></div>
   </div>
   <div class="stat-card">
-    <div class="stat-card__label">Contact Enquiries</div>
-    <div class="stat-card__val"><?= (int)$stats['contacts'] ?></div>
+    <div class="stat-card__label" style="color:#1d4ed8">New</div>
+    <div class="stat-card__val" style="color:#1d4ed8"><?= (int)$stats['new_count'] ?></div>
   </div>
   <div class="stat-card">
-    <div class="stat-card__label">Bookings</div>
-    <div class="stat-card__val"><?= (int)$stats['bookings'] ?></div>
+    <div class="stat-card__label" style="color:#c2410c">Assigned / In Progress</div>
+    <div class="stat-card__val" style="color:#c2410c"><?= (int)$stats['active_count'] ?></div>
   </div>
   <div class="stat-card">
-    <div class="stat-card__label" style="color:#ef4444">Unread</div>
-    <div class="stat-card__val" style="color:#ef4444"><?= (int)$stats['new_count'] ?></div>
+    <div class="stat-card__label" style="color:#15803d">Completed</div>
+    <div class="stat-card__val" style="color:#15803d"><?= (int)$stats['completed_count'] ?></div>
   </div>
 </div>
 
 <!-- Filters -->
-<div class="filters">
-  <a href="<?= leadsUrl(['type'=>'all',     'page'=>1]) ?>" class="filter-btn <?= $type==='all'     ?'active':'' ?>">All Types</a>
-  <a href="<?= leadsUrl(['type'=>'contact', 'page'=>1]) ?>" class="filter-btn <?= $type==='contact' ?'active':'' ?>"><i class="fa-solid fa-envelope"></i> Contact</a>
-  <a href="<?= leadsUrl(['type'=>'booking', 'page'=>1]) ?>" class="filter-btn <?= $type==='booking' ?'active':'' ?>"><i class="fa-solid fa-calendar-check"></i> Booking</a>
-  <div class="filter-sep"></div>
-  <a href="<?= leadsUrl(['status'=>'all',  'page'=>1]) ?>" class="filter-btn <?= $status==='all'  ?'active':'' ?>">All Status</a>
-  <a href="<?= leadsUrl(['status'=>'new',  'page'=>1]) ?>" class="filter-btn <?= $status==='new'  ?'active':'' ?>">New</a>
-  <a href="<?= leadsUrl(['status'=>'read', 'page'=>1]) ?>" class="filter-btn <?= $status==='read' ?'active':'' ?>">Read</a>
-  <a href="<?= leadsUrl(['status'=>'done', 'page'=>1]) ?>" class="filter-btn <?= $status==='done' ?'active':'' ?>">Done</a>
-</div>
+<form method="GET" class="card" style="padding:16px 18px;margin-bottom:18px">
+  <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end">
+    <div class="form-group" style="margin-bottom:0;min-width:150px">
+      <label for="f-date">Date</label>
+      <input type="date" id="f-date" name="date" value="<?= htmlspecialchars($date) ?>">
+    </div>
+    <div class="form-group" style="margin-bottom:0;min-width:170px">
+      <label for="f-service">Service</label>
+      <select id="f-service" name="service">
+        <option value="all">All Services</option>
+        <?php foreach ($services as $svc): ?>
+          <option value="<?= htmlspecialchars($svc) ?>" <?= $service === $svc ? 'selected' : '' ?>><?= htmlspecialchars($svc) ?></option>
+        <?php endforeach; ?>
+      </select>
+    </div>
+    <div class="form-group" style="margin-bottom:0;min-width:160px">
+      <label for="f-status">Status</label>
+      <select id="f-status" name="status">
+        <option value="all">All Status</option>
+        <?php foreach ($STATUSES as $s): ?>
+          <option value="<?= $s ?>" <?= $status === $s ? 'selected' : '' ?>><?= $s ?></option>
+        <?php endforeach; ?>
+      </select>
+    </div>
+    <div class="form-group" style="margin-bottom:0;flex:1;min-width:180px">
+      <label for="f-search">Search <span style="font-weight:400;color:#94a3b8">(name, mobile, booking ID)</span></label>
+      <input type="text" id="f-search" name="search" value="<?= htmlspecialchars($search) ?>" placeholder="Search leads…">
+    </div>
+    <div style="display:flex;gap:8px">
+      <button type="submit" class="btn btn--primary btn--sm"><i class="fa-solid fa-filter"></i> Filter</button>
+      <?php if ($date || ($service !== 'all') || ($status !== 'all') || $search): ?>
+        <a href="leads.php" class="btn btn--secondary btn--sm">Clear</a>
+      <?php endif; ?>
+    </div>
+  </div>
+</form>
 
 <!-- Table -->
 <div class="card" style="padding:0">
@@ -104,10 +143,10 @@ include '_header.php';
     <table>
       <thead>
         <tr>
-          <th>Type</th>
+          <th>Booking ID</th>
           <th>Name</th>
-          <th>Phone</th>
-          <th>Subject / Service</th>
+          <th>Mobile</th>
+          <th>Service</th>
           <th>Received</th>
           <th>Status</th>
           <th>Actions</th>
@@ -125,47 +164,66 @@ include '_header.php';
         </tr>
         <?php else: foreach ($leads as $lead): ?>
         <tr>
-          <td><span class="badge-<?= $lead['type'] ?>"><?= ucfirst($lead['type']) ?></span></td>
-          <td>
-            <strong><?= htmlspecialchars($lead['name']) ?></strong>
-            <?php if ($lead['email']): ?>
-              <br><small style="color:#94a3b8"><?= htmlspecialchars($lead['email']) ?></small>
+          <td data-label="Booking ID">
+            <?php if ($lead['booking_id']): ?>
+              <a href="lead-view.php?id=<?= $lead['id'] ?>" style="font-weight:700;color:#0f172a;text-decoration:none"><?= htmlspecialchars($lead['booking_id']) ?></a>
+            <?php else: ?>
+              <span class="badge-<?= htmlspecialchars($lead['type']) ?>"><?= $lead['type'] === 'quick_enquiry' ? 'Quick Enquiry' : ucfirst($lead['type']) ?></span>
             <?php endif; ?>
           </td>
-          <td style="white-space:nowrap"><?= htmlspecialchars($lead['phone'] ?? '—') ?></td>
-          <td style="max-width:180px">
-            <span style="display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#64748b">
-              <?= htmlspecialchars($lead['service'] ?: $lead['subject'] ?: '—') ?>
+          <td data-label="Name">
+            <a href="lead-view.php?id=<?= $lead['id'] ?>" style="color:#0f172a;text-decoration:none;font-weight:600"><?= htmlspecialchars($lead['name']) ?></a>
+          </td>
+          <td data-label="Mobile" style="white-space:nowrap">
+            <span class="copy-field">
+              <?= htmlspecialchars($lead['mobile']) ?>
+              <button type="button" class="copy-btn" data-copy="<?= htmlspecialchars($lead['mobile']) ?>" title="Copy"><i class="fa-regular fa-copy"></i></button>
             </span>
           </td>
-          <td style="white-space:nowrap;color:#64748b;font-size:.8rem">
+          <td data-label="Service" style="max-width:180px">
+            <span style="display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#64748b">
+              <?= htmlspecialchars($lead['service'] ?: '—') ?>
+            </span>
+          </td>
+          <td data-label="Received" style="white-space:nowrap;color:#64748b;font-size:.8rem">
             <?= date('d M Y', strtotime($lead['created_at'])) ?><br>
             <?= date('h:i A', strtotime($lead['created_at'])) ?>
           </td>
-          <td><span class="badge-<?= $lead['status'] ?>"><?= ucfirst($lead['status']) ?></span></td>
-          <td>
+          <td data-label="Status">
+            <form method="POST" class="status-form">
+              <input type="hidden" name="id" value="<?= $lead['id'] ?>">
+              <input type="hidden" name="action" value="set_status">
+              <input type="hidden" name="date_filter" value="<?= htmlspecialchars($date) ?>">
+              <input type="hidden" name="service_filter" value="<?= htmlspecialchars($service) ?>">
+              <input type="hidden" name="status_filter" value="<?= htmlspecialchars($status) ?>">
+              <input type="hidden" name="search_filter" value="<?= htmlspecialchars($search) ?>">
+              <input type="hidden" name="page_num" value="<?= $page ?>">
+              <select name="status" class="status-pill <?= statusClass($lead['status']) ?>" onchange="this.form.submit()">
+                <?php foreach ($STATUSES as $s): ?>
+                  <option value="<?= $s ?>" <?= $lead['status'] === $s ? 'selected' : '' ?>><?= $s ?></option>
+                <?php endforeach; ?>
+              </select>
+            </form>
+          </td>
+          <td data-label="Actions">
             <div style="display:flex;gap:5px;align-items:center">
               <a href="lead-view.php?id=<?= $lead['id'] ?>" class="btn btn--sm btn--secondary" title="View details">
                 <i class="fa-solid fa-eye"></i>
               </a>
-              <?php if ($lead['status'] !== 'done'): ?>
-              <form method="POST" style="display:inline">
-                <input type="hidden" name="id"            value="<?= $lead['id'] ?>">
-                <input type="hidden" name="action"        value="<?= $lead['status']==='new' ? 'read' : 'done' ?>">
-                <input type="hidden" name="type_filter"   value="<?= htmlspecialchars($type) ?>">
-                <input type="hidden" name="status_filter" value="<?= htmlspecialchars($status) ?>">
-                <input type="hidden" name="page_num"      value="<?= $page ?>">
-                <button type="submit" class="btn btn--sm btn--success" title="Mark <?= $lead['status']==='new' ? 'Read' : 'Done' ?>">
-                  <i class="fa-solid fa-<?= $lead['status']==='new' ? 'envelope-open' : 'check' ?>"></i>
-                </button>
-              </form>
-              <?php endif; ?>
+              <a href="tel:<?= htmlspecialchars($lead['mobile']) ?>" class="btn btn--sm btn--secondary" title="Call">
+                <i class="fa-solid fa-phone"></i>
+              </a>
+              <a href="https://wa.me/91<?= htmlspecialchars(preg_replace('/\D/', '', $lead['mobile'])) ?>" target="_blank" rel="noopener" class="btn btn--sm btn--success" title="WhatsApp">
+                <i class="fa-brands fa-whatsapp"></i>
+              </a>
               <form method="POST" style="display:inline" onsubmit="return confirm('Delete this lead?')">
-                <input type="hidden" name="id"            value="<?= $lead['id'] ?>">
-                <input type="hidden" name="action"        value="delete">
-                <input type="hidden" name="type_filter"   value="<?= htmlspecialchars($type) ?>">
+                <input type="hidden" name="id" value="<?= $lead['id'] ?>">
+                <input type="hidden" name="action" value="delete">
+                <input type="hidden" name="date_filter" value="<?= htmlspecialchars($date) ?>">
+                <input type="hidden" name="service_filter" value="<?= htmlspecialchars($service) ?>">
                 <input type="hidden" name="status_filter" value="<?= htmlspecialchars($status) ?>">
-                <input type="hidden" name="page_num"      value="<?= $page ?>">
+                <input type="hidden" name="search_filter" value="<?= htmlspecialchars($search) ?>">
+                <input type="hidden" name="page_num" value="<?= $page ?>">
                 <button type="submit" class="btn btn--sm btn--danger" title="Delete">
                   <i class="fa-solid fa-trash"></i>
                 </button>
