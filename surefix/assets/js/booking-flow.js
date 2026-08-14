@@ -313,8 +313,48 @@
   var SLOT_INTERVAL_MIN = 30;
   var calendarOpen = false;
   var calMonthOffset = 0;
+  var EMERGENCY_SUB_DEFAULT = '24/7 priority dispatch, small surcharge applies';
+  var EMERGENCY_SUB_UNAVAILABLE = "Unavailable right now — outside today's booking hours (8 AM – 10 PM)";
+
+  // "Emergency ASAP" means dispatch within 60 minutes today — if today has
+  // no bookable slots left (same cutoff as the ordinary slot list: business
+  // hours over, or less than the 1hr-ahead buffer remaining), there's no
+  // honest way to promise that, so the option itself needs to be disabled
+  // rather than silently accepting a booking it can't fulfil.
+  function hasSlotsToday() {
+    var now = new Date();
+    var earliest = new Date();
+    earliest.setHours(earliest.getHours() + 1);
+    var startMin = SLOT_START_HOUR * 60;
+    var endMin = SLOT_END_HOUR * 60;
+    for (var m = startMin; m < endMin; m += SLOT_INTERVAL_MIN) {
+      var slotStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      slotStart.setHours(0, m, 0, 0);
+      if (slotStart >= earliest) return true;
+    }
+    return false;
+  }
+
+  function refreshEmergencyAvailability() {
+    var card = document.getElementById('emergencyCard');
+    var sub = document.getElementById('emergencyCardSub');
+    var available = hasSlotsToday();
+    card.classList.toggle('is-disabled', !available);
+    card.setAttribute('aria-disabled', available ? 'false' : 'true');
+    if (sub) sub.textContent = available ? EMERGENCY_SUB_DEFAULT : EMERGENCY_SUB_UNAVAILABLE;
+    if (!available && state.emergency) {
+      state.emergency = false;
+      card.classList.remove('is-active');
+      card.setAttribute('aria-pressed', 'false');
+    }
+    return available;
+  }
 
   function toggleEmergency() {
+    if (!refreshEmergencyAvailability()) {
+      showHint(5, "Emergency booking isn't available right now — please pick a date & time slot instead.");
+      return;
+    }
     state.emergency = !state.emergency;
     var card = document.getElementById('emergencyCard');
     card.classList.toggle('is-active', state.emergency);
@@ -327,6 +367,7 @@
 
   function renderSchedule() {
     if (!state.date) { state.date = toDateStr(new Date()); state.dateIsCustom = false; }
+    refreshEmergencyAvailability();
     renderDateRow();
     renderCalendarPanel();
     renderSlotGroups();

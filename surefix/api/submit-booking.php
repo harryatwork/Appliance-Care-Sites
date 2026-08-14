@@ -58,6 +58,25 @@ if ($address === '') {
 if (!$emergency && ($date === '' || $slot === '')) {
     respond(false, ['error' => 'Please select a date and time slot, or choose Emergency.']);
 }
+// Server-side mirror of booking-flow.js's hasSlotsToday() — the "Emergency"
+// option is meant to promise dispatch within 60 minutes today, so it's
+// rejected here too (not just hidden client-side) once today's booking
+// hours (8 AM–10 PM, same 30-min slot grid as the ordinary slot list) can
+// no longer fit a slot starting at least an hour from now. Walks the same
+// discrete slot boundaries as the client rather than a continuous-time
+// approximation, so the two can't disagree at the edges of the window.
+if ($emergency) {
+    $now = new DateTime();
+    $earliest = (clone $now)->modify('+1 hour');
+    $todayClose = (clone $now)->setTime(22, 0, 0);
+    $hasSlotToday = false;
+    for ($slotTime = (clone $now)->setTime(8, 0, 0); $slotTime < $todayClose; $slotTime->modify('+30 minutes')) {
+        if ($slotTime >= $earliest) { $hasSlotToday = true; break; }
+    }
+    if (!$hasSlotToday) {
+        respond(false, ['error' => "Emergency booking isn't available right now — please select a date and time slot instead."]);
+    }
+}
 if ($email !== '' && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
     respond(false, ['error' => 'Please enter a valid email address.']);
 }

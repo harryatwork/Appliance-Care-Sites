@@ -373,6 +373,45 @@ comes in Phase 2.
   since you said lead management + profile + blogs was the current scope.
   Left the files in place rather than deleting them in case you want that
   scope later; they'd need their own DB tables first if so.
+- [x] Client feedback round 9 — admin panel observations (2026-08-14):
+  - **Fixed the emergency-booking bug** — Emergency ASAP could still be
+    submitted even when today has no bookable slots left (your example:
+    11:30 PM). Fixed on both ends, not just the UI: the client-side
+    Emergency card now visually disables itself once today's last
+    half-hour slot (8 AM–10 PM grid) can't fit the required "1 hour from
+    now" buffer, *and* `api/submit-booking.php` independently re-checks
+    the same rule server-side and rejects the booking if bypassed — so
+    even a direct API call (not just the on-screen button) can't create an
+    emergency booking outside hours.
+  - Call/WhatsApp/Delete on the lead detail page are now full-size buttons
+    (`.btn--lg`) instead of small ones; the View/Call/WhatsApp/Delete icon
+    buttons in the leads list are now uniform 36×36px targets, easier to
+    tap on mobile.
+  - Added a **Copy All Details** button on the lead detail page — copies
+    every populated field as one plain-text block (label: value per line)
+    in a single click, instead of copying field-by-field.
+  - Renamed "Date Created" → **Booked On** (both list and detail view, for
+    consistency) and "Area" → **Type** (the Home/Work/Other address tag).
+  - Location Pin no longer shows raw latitude/longitude text — it's now a
+    single "View on Map" link straight to Google Maps.
+  - Detail-view label column is now a fixed width (was min-width, which let
+    each row's label size to its own text) so every row's value now starts
+    at the same x-position — the alignment issue you flagged.
+  - **Technician assignment** — added a `technician_name` column to
+    `leads` (migration note in `sql/schema.sql` for the column since your
+    dev DB already existed when this was added). Lead detail page has an
+    inline "assign a technician" field; the leads list shows a technician
+    tag/badge per row ("Unassigned" in gray if nobody's assigned yet) and
+    a new Technician filter dropdown (including an "Unassigned" option) so
+    you can filter by name.
+  - Quick Enquiry leads now show only Customer Name, Mobile Number,
+    Message (if any) and Booked On — the full field list was mostly empty
+    "—" placeholders for this lead type, per your note to keep it to
+    Name & Contact.
+  - Replaced the dashboard's flat white cards/stat-cards/login box with a
+    subtly tinted background + border on each, so panels read as visually
+    separated modules against the page background rather than plain white
+    blocks with only a shadow.
 
 ## Phase 4 — SEO
 - [ ] Editable meta title/description per page (DB-driven for blog, config for

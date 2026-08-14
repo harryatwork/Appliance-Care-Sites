@@ -795,6 +795,9 @@ section { position: relative; z-index: 2; }
 }
 .emergency-card:hover { transform: translateY(-2px); }
 .emergency-card.is-active { border-color: var(--accent); box-shadow: 0 10px 26px -12px rgba(255, 152, 0, 0.6); }
+.emergency-card.is-disabled { opacity: 0.55; cursor: not-allowed; }
+.emergency-card.is-disabled:hover { transform: none; }
+.emergency-card.is-disabled .emergency-card__sub { color: rgba(255, 255, 255, 0.8); font-style: italic; }
 .emergency-card__icon {
   width: 42px; height: 42px; border-radius: 12px; background: var(--accent); flex: 0 0 42px;
   display: flex; align-items: center; justify-content: center; font-size: 18px; color: #fff;

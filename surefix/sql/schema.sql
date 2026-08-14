@@ -51,6 +51,7 @@ CREATE TABLE IF NOT EXISTS leads (
   notes TEXT NULL,
   message TEXT NULL,
   status ENUM('New','Assigned','In Progress','Completed','Cancelled') NOT NULL DEFAULT 'New',
+  technician_name VARCHAR(120) NULL,
   ip_address VARCHAR(45) NULL,
   created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -58,8 +59,16 @@ CREATE TABLE IF NOT EXISTS leads (
   KEY idx_status (status),
   KEY idx_service (service),
   KEY idx_created (created_at),
-  KEY idx_mobile (mobile)
+  KEY idx_mobile (mobile),
+  KEY idx_technician (technician_name)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Migration note: this column/index was added 2026-08-14, after some
+-- databases were already created from an earlier version of this file.
+-- CREATE TABLE IF NOT EXISTS won't retrofit an existing `leads` table, so
+-- if you're re-running this file against a pre-existing DB, run this once:
+--   ALTER TABLE leads ADD COLUMN technician_name VARCHAR(120) NULL AFTER status;
+--   ALTER TABLE leads ADD KEY idx_technician (technician_name);
 
 -- ---------------------------------------------------------------------------
 -- Blog

@@ -328,7 +328,7 @@ $problemImageMap = [
             <span class="emergency-card__icon"><i class="fa-solid fa-bolt"></i></span>
             <span class="emergency-card__body">
               <span class="emergency-card__title">Emergency — ASAP within 60 minutes</span>
-              <span class="emergency-card__sub">24/7 priority dispatch, small surcharge applies</span>
+              <span class="emergency-card__sub" id="emergencyCardSub">24/7 priority dispatch, small surcharge applies</span>
             </span>
             <span class="emergency-card__check"><i class="fa-solid fa-check"></i></span>
           </div>
