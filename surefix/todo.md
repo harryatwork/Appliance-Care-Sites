@@ -412,6 +412,35 @@ comes in Phase 2.
     subtly tinted background + border on each, so panels read as visually
     separated modules against the page background rather than plain white
     blocks with only a shadow.
+- [x] Client feedback round 10 (2026-08-15):
+  - Fixed **Copy All Details** button — it combined a `.btn` class with the
+    small icon-only `.copy-btn` class, and the two fought over sizing
+    (`.copy-btn` forces a fixed 24×24px box), squeezing the button text
+    into a tiny broken shape instead of a normal-sized button. Added a
+    scoped CSS override so a `.btn` + `.copy-btn` combination always gets
+    normal button proportions.
+  - **Dashboard background, third pass** — the first two attempts were too
+    close to white to actually read as different. This time cards/stat
+    cards/login box use a clearly visible gray-blue tint with a solid
+    border, buttons and chips inside them are white so they visibly "pop"
+    off the card surface, and every internal divider/hover color was
+    re-tuned to stay visible against the new tones (nothing should read as
+    white-on-white anymore, on any monitor).
+  - **Technician dropdown** — added a `technicians` table and a new
+    Technicians admin page (add/rename/activate-deactivate/delete, modeled
+    on Blog Categories) so technician names live in one managed list
+    instead of being free-typed per lead. The lead detail page's
+    "Technician" field is now a dropdown sourced from that list instead of
+    a text box. Deactivating or deleting a technician removes them from
+    future assignment choices but doesn't touch leads already assigned to
+    them — their name stays selectable on that specific lead so nothing
+    silently disappears from a booking's history.
+  - Name is now copyable in the leads list (it only had the view-detail
+    link before, no copy button).
+  - Fixed date/datetime-local inputs (leads date filter, blog post publish
+    date) rendering with no styling — they were missing from the shared
+    input CSS selector list, so they fell back to the browser's bare
+    default appearance instead of matching every other field.
 
 ## Phase 4 — SEO
 - [ ] Editable meta title/description per page (DB-driven for blog, config for

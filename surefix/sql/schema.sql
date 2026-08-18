@@ -71,6 +71,27 @@ CREATE TABLE IF NOT EXISTS leads (
 --   ALTER TABLE leads ADD KEY idx_technician (technician_name);
 
 -- ---------------------------------------------------------------------------
+-- Technicians — managed from admin/technicians.php, offered as a dropdown
+-- when assigning a lead (leads.technician_name stores the chosen name as
+-- plain text, not a foreign key — simplest option that still gets you a
+-- dropdown instead of free typing, and means deleting a technician later
+-- doesn't touch already-assigned leads).
+-- ---------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS technicians (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(120) NOT NULL,
+  is_active TINYINT(1) NOT NULL DEFAULT 1,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE KEY uniq_name (name)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Migration note: added 2026-08-15, same situation as technician_name
+-- above — CREATE TABLE IF NOT EXISTS only helps on a database that doesn't
+-- already have `leads`/`blog_posts` etc. On an existing DB, just run the
+-- CREATE TABLE statement above on its own; it's a new table so there's
+-- nothing to retrofit.
+
+-- ---------------------------------------------------------------------------
 -- Blog
 -- ---------------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS blog_categories (

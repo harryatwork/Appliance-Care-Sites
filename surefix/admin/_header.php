@@ -32,6 +32,9 @@ try {
           <span class="badge"><?= (int)$unread ?></span>
         <?php endif; ?>
       </a>
+      <a href="technicians.php" class="<?= ($ACTIVE_NAV ?? '') === 'technicians' ? 'active' : '' ?>">
+        <i class="fa-solid fa-screwdriver-wrench"></i> Technicians
+      </a>
       <a href="blogs.php" class="<?= ($ACTIVE_NAV ?? '') === 'blogs' ? 'active' : '' ?>">
         <i class="fa-solid fa-blog"></i> Blog Posts
       </a>

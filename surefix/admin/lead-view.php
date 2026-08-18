@@ -27,6 +27,17 @@ $stmt->execute([$id]);
 $lead = $stmt->fetch();
 if (!$lead) { header('Location: leads.php'); exit; }
 
+$technicians = db()->query('SELECT name FROM technicians WHERE is_active = 1 ORDER BY name ASC')->fetchAll(PDO::FETCH_COLUMN);
+$hasNoTechnicians = empty($technicians);
+// If this lead is assigned to someone no longer in the active list (removed
+// or deactivated since assignment), keep their name selectable so it isn't
+// silently dropped the moment this page loads — saving without touching
+// the dropdown should leave the assignment exactly as it was.
+$currentTech = $lead['technician_name'] ?? '';
+if ($currentTech !== '' && !in_array($currentTech, $technicians, true)) {
+    $technicians[] = $currentTech;
+}
+
 function statusClass(string $s): string { return 'status-' . str_replace(' ', '-', $s); }
 
 // Renders one label/value row. $copyable also feeds the "Copy All" text
@@ -115,10 +126,18 @@ include '_header.php';
       <form method="POST">
         <input type="hidden" name="id" value="<?= $lead['id'] ?>">
         <input type="hidden" name="action" value="set_technician">
-        <input type="text" name="technician_name" value="<?= htmlspecialchars($lead['technician_name'] ?? '') ?>" placeholder="Assign a technician">
+        <select name="technician_name">
+          <option value="">— Unassigned —</option>
+          <?php foreach ($technicians as $tech): ?>
+            <option value="<?= htmlspecialchars($tech) ?>" <?= $currentTech === $tech ? 'selected' : '' ?>><?= htmlspecialchars($tech) ?></option>
+          <?php endforeach; ?>
+        </select>
         <button type="submit" class="btn btn--sm btn--secondary"><i class="fa-solid fa-floppy-disk"></i> Save</button>
       </form>
     </div>
+    <?php if ($hasNoTechnicians): ?>
+    <p style="font-size:.8rem;color:#94a3b8;margin:-4px 0 0 176px">No technicians added yet — <a href="technicians.php">add one</a> to assign this lead.</p>
+    <?php endif; ?>
   </div>
 
   <?php if (!empty($copyAllLines)): ?>
