@@ -1,0 +1,18 @@
+# Sure Fix — Apache config
+# Clean-URL rewrites will be added in Phase 4 (SEO) once page URLs are final.
+# For now: basic hardening only.
+
+# Disable directory listing
+Options -Indexes
+
+# Block direct web access to internal-only folders
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteRule ^includes/ - [F,L]
+  RewriteRule ^sql/ - [F,L]
+</IfModule>
+
+# Fallback for servers without mod_rewrite: deny via directory config
+<FilesMatch "\.(sql)$">
+  Require all denied
+</FilesMatch>
